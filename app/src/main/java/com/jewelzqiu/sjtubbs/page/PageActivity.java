@@ -1,7 +1,6 @@
 package com.jewelzqiu.sjtubbs.page;
 
 import com.jewelzqiu.sjtubbs.R;
-import com.jewelzqiu.sjtubbs.support.Utils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -18,12 +17,11 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import java.io.IOException;
 import java.util.LinkedHashMap;
 
 public class PageActivity extends Activity {
 
-    public static final String POST_URL = "post_url";
+    public static final String POST_CONTENT = "post_url";
 
     public static final String PAGE_TITLE = "page_title";
 
@@ -51,7 +49,7 @@ public class PageActivity extends Activity {
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.setWebChromeClient(new WebChromeClient());
         mWebView.setWebViewClient(new MyWebViewClient());
-        new PrepareContentTask(mWebView).execute(getIntent().getStringExtra(POST_URL));
+        new PrepareContentTask(mWebView).execute(getIntent().getStringExtra(POST_CONTENT));
 
         setTitle(getIntent().getStringExtra(PAGE_TITLE));
     }
@@ -96,7 +94,7 @@ public class PageActivity extends Activity {
 
     private class PrepareContentTask extends AsyncTask<String, Void, Boolean> {
 
-        private String url;
+        private String html;
 
         private WebView mWebView;
 
@@ -108,22 +106,17 @@ public class PageActivity extends Activity {
 
         @Override
         protected Boolean doInBackground(String... params) {
-            url = params[0];
+            html = params[0];
             boolean success = true;
 
-            try {
-                Document doc = Jsoup.connect(url).get();
-                Elements imgs = doc.select("img");
-                for (Element img : imgs) {
-                    img.wrap("<a href='" + Utils.BBS_BASE_URL + img.attr("src") + "'></a>");
-                    int pos = imgUrlMap.size();
-                    imgUrlMap.put(Utils.BBS_BASE_URL + img.attr("src"), pos);
-                }
-                content = doc.outerHtml();
-            } catch (IOException e) {
-                e.printStackTrace();
-                success = false;
+            Document doc = Jsoup.parse(html);
+            Elements imgs = doc.select("img");
+            for (Element img : imgs) {
+                img.wrap("<a href='" + img.attr("src") + "'></a>");
+                int pos = imgUrlMap.size();
+                imgUrlMap.put(img.attr("src"), pos);
             }
+            content = doc.outerHtml();
 
             return success;
         }
@@ -131,9 +124,9 @@ public class PageActivity extends Activity {
         @Override
         protected void onPostExecute(Boolean success) {
             if (success) {
-                mWebView.loadDataWithBaseURL(url, content, "text/html", "UTF-8", null);
+                mWebView.loadDataWithBaseURL(null, content, "text/html", "UTF-8", null);
             } else {
-                mWebView.loadUrl(url);
+                mWebView.loadUrl(null);
             }
         }
     }

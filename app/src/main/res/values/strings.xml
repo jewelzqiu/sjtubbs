@@ -16,5 +16,6 @@
     <string name="title_activity_board">BoardActivity</string>
     <string name="title_activity_settings">设置</string>
     <string name="title_activity_pic">PicActivity</string>
+    <string name="title_activity_post_page">PostPageActivity</string>
 
 </resources>

@@ -1,7 +1,7 @@
 package com.jewelzqiu.sjtubbs.support;
 
 import com.jewelzqiu.sjtubbs.R;
-import com.jewelzqiu.sjtubbs.page.PageActivity;
+import com.jewelzqiu.sjtubbs.page.PostPageActivity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -68,9 +68,9 @@ public class PostListAdapter extends BaseAdapter {
     }
 
     public void onItemClick(int position, Context context) {
-        Intent intent = new Intent(context, PageActivity.class);
-        intent.putExtra(PageActivity.POST_URL, mPosts.get(position).url);
-        intent.putExtra(PageActivity.PAGE_TITLE, mPosts.get(position).title);
+        Intent intent = new Intent(context, PostPageActivity.class);
+        intent.putExtra(PostPageActivity.POST_URL, mPosts.get(position).url);
+        intent.putExtra(PostPageActivity.PAGE_TITLE, mPosts.get(position).title);
         context.startActivity(intent);
     }
 
