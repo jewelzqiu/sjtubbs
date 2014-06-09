@@ -40,6 +40,8 @@ public class MainActivity extends Activity
 
     private SettingsFragment mSettingsFragment;
 
+    private int mCurrentItem = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +62,7 @@ public class MainActivity extends Activity
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
+        mCurrentItem = position;
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getFragmentManager();
         Fragment fragment = null;
@@ -101,6 +104,8 @@ public class MainActivity extends Activity
     public boolean onPrepareOptionsMenu(Menu menu) {
         if (mNavigationDrawerFragment.isDrawerOpen()) {
             mTitle = getString(R.string.app_name);
+        } else {
+            mTitle = drawerListTitles[mCurrentItem];
         }
         restoreActionBar();
         return super.onPrepareOptionsMenu(menu);

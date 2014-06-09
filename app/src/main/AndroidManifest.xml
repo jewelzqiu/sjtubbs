@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.jewelzqiu.sjtubbs" >
+    package="com.jewelzqiu.sjtubbs">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -9,10 +9,10 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".main.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,12 +21,14 @@
         </activity>
         <activity
             android:name=".page.PageActivity"
-            android:label="@string/title_activity_page" >
-        </activity>
+            android:label="@string/title_activity_page" />
         <activity
             android:name=".sections.BoardActivity"
-            android:label="@string/title_activity_board" >
-        </activity>
+            android:label="@string/title_activity_board" />
+        <activity
+            android:name=".page.PicActivity"
+            android:label="@string/title_activity_pic"
+            android:theme="@style/PicBrowserTheme" />
     </application>
 
 </manifest>

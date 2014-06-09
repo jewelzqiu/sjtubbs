@@ -10,7 +10,8 @@
     </style>
 
     <style name="PicBrowserTheme" parent="android:Theme.Holo.NoActionBar.Fullscreen">
-
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
 </resources>

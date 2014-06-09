@@ -15,5 +15,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_board">BoardActivity</string>
     <string name="title_activity_settings">设置</string>
+    <string name="title_activity_pic">PicActivity</string>
 
 </resources>

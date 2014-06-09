@@ -47,7 +47,8 @@ public class GetPostsTask extends AsyncTask<String, Void, Void> {
             String author = data.get(2).select("a").first().text();
             Element element = data.get(4).select("a").first();
             String title = element.text();
-            String url = Utils.BBS_BASE_URL + "/" + element.attr("href");
+            String url = Utils.BBS_BASE_URL + "/" + element.attr("href").replace("bbstcon",
+                    "bbswaptcon");
             postList.add(new Post(url, title, desc, author));
         }
     }
