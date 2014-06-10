@@ -1,5 +1,6 @@
 package com.jewelzqiu.sjtubbs.main;
 
+import com.jewelzqiu.sjtubbs.R;
 import com.jewelzqiu.sjtubbs.support.Post;
 import com.jewelzqiu.sjtubbs.support.Section;
 
@@ -25,14 +26,28 @@ public class BBSApplication extends Application {
 
     public static int screenHeight = -1;
 
+    public static int contentWidth = -1;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        getSize();
+    }
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+        getSize();
+    }
+
+    private void getSize() {
         WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
         screenWidth = size.x;
         screenHeight = size.y;
+        contentWidth = (int) (BBSApplication.screenWidth
+                - getResources().getDimension(R.dimen.activity_horizontal_margin) * 2);
     }
 }
