@@ -1,6 +1,8 @@
 package com.jewelzqiu.sjtubbs.page;
 
 import com.jewelzqiu.sjtubbs.R;
+import com.jewelzqiu.sjtubbs.main.BBSApplication;
+import com.jewelzqiu.sjtubbs.support.Utils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -17,8 +19,6 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import java.util.LinkedHashMap;
-
 public class PageActivity extends Activity {
 
     public static final String POST_CONTENT = "post_url";
@@ -32,8 +32,6 @@ public class PageActivity extends Activity {
             + "this.width = screen.width"
             + "}"
             + "}";
-
-    static final LinkedHashMap<String, Integer> imgUrlMap = new LinkedHashMap<String, Integer>();
 
     private WebView mWebView;
 
@@ -49,6 +47,7 @@ public class PageActivity extends Activity {
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.setWebChromeClient(new WebChromeClient());
         mWebView.setWebViewClient(new MyWebViewClient());
+        BBSApplication.imgUrlMap.clear();
         new PrepareContentTask(mWebView).execute(getIntent().getStringExtra(POST_CONTENT));
 
         setTitle(getIntent().getStringExtra(PAGE_TITLE));
@@ -82,9 +81,9 @@ public class PageActivity extends Activity {
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            if (imgUrlMap.containsKey(url)) {
+            if (BBSApplication.imgUrlMap.containsKey(url)) {
                 Intent intent = new Intent(PageActivity.this, PicActivity.class);
-                intent.putExtra(PicActivity.PHOTO_POSITION, imgUrlMap.get(url));
+                intent.putExtra(PicActivity.PHOTO_POSITION, BBSApplication.imgUrlMap.get(url));
                 startActivity(intent);
                 return true;
             }
@@ -113,8 +112,8 @@ public class PageActivity extends Activity {
             Elements imgs = doc.select("img");
             for (Element img : imgs) {
                 img.wrap("<a href='" + img.attr("src") + "'></a>");
-                int pos = imgUrlMap.size();
-                imgUrlMap.put(img.attr("src"), pos);
+                int pos = BBSApplication.imgUrlMap.size();
+                BBSApplication.imgUrlMap.put(Utils.BBS_BASE_URL + img.attr("src"), pos);
             }
             content = doc.outerHtml();
 

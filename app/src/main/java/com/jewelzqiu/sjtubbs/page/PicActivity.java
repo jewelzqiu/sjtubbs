@@ -1,6 +1,7 @@
 package com.jewelzqiu.sjtubbs.page;
 
 import com.jewelzqiu.sjtubbs.R;
+import com.jewelzqiu.sjtubbs.main.BBSApplication;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -21,7 +22,7 @@ public class PicActivity extends Activity {
 
         mViewPager = (HackyViewPager) findViewById(R.id.view_pager);
         setContentView(mViewPager);
-        mViewPager.setAdapter(new PicPagerAdapter(this, PageActivity.imgUrlMap));
+        mViewPager.setAdapter(new PicPagerAdapter(this, BBSApplication.imgUrlMap));
         mViewPager.setCurrentItem(getIntent().getIntExtra(PHOTO_POSITION, 0));
 
         if (savedInstanceState != null) {

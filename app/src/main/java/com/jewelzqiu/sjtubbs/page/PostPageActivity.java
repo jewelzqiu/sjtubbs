@@ -1,6 +1,7 @@
 package com.jewelzqiu.sjtubbs.page;
 
 import com.jewelzqiu.sjtubbs.R;
+import com.jewelzqiu.sjtubbs.main.BBSApplication;
 import com.jewelzqiu.sjtubbs.support.Utils;
 
 import org.jsoup.Jsoup;
@@ -9,18 +10,20 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
@@ -45,8 +48,6 @@ public class PostPageActivity extends Activity implements AbsListView.OnScrollLi
     private static final int FLAG_ERROR = -1;
 
     private static final int FLAG_NO_MORE = 1;
-
-    static final LinkedHashMap<String, Integer> imgUrlMap = new LinkedHashMap<String, Integer>();
 
     private PullToRefreshLayout mPullToRefreshLayout;
 
@@ -90,7 +91,14 @@ public class PostPageActivity extends Activity implements AbsListView.OnScrollLi
 
         originalUrl = getIntent().getStringExtra(POST_URL);
 
+        BBSApplication.imgUrlMap.clear();
         new PrepareContentTask().execute(originalUrl);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.post_page, menu);
+        return true;
     }
 
     @Override
@@ -98,6 +106,13 @@ public class PostPageActivity extends Activity implements AbsListView.OnScrollLi
         int id = item.getItemId();
         if (id == android.R.id.home) {
             finish();
+            return true;
+        } else if (id == R.id.action_pic) {
+            if (BBSApplication.imgUrlMap.isEmpty()) {
+                Toast.makeText(this, "此贴没有图片！", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+            startActivity(new Intent(this, PicActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -170,6 +185,8 @@ public class PostPageActivity extends Activity implements AbsListView.OnScrollLi
                     String src = img.attr("src");
                     src = Utils.BBS_BASE_URL + src;
                     img.attr("src", src);
+                    int pos = BBSApplication.imgUrlMap.size();
+                    BBSApplication.imgUrlMap.put(src, pos);
                 }
 
                 Elements posts = doc.getElementsByTag("pre");

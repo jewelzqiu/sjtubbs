@@ -12,6 +12,7 @@ import android.view.Display;
 import android.view.WindowManager;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
  * Created by jewelzqiu on 6/8/14.
@@ -21,6 +22,8 @@ public class BBSApplication extends Application {
     public static ArrayList<Post> topTenList = null;
 
     public static ArrayList<Section> sectionList = null;
+
+    public static LinkedHashMap<String, Integer> imgUrlMap = new LinkedHashMap<String, Integer>();
 
     public static int screenWidth = -1;
 
