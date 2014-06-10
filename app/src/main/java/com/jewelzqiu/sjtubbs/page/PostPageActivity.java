@@ -17,7 +17,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -140,12 +139,12 @@ public class PostPageActivity extends Activity implements AbsListView.OnScrollLi
                 mFooterView.setVisibility(View.INVISIBLE);
                 break;
         }
-        mPostListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mAdapter.onItemClick(PostPageActivity.this, position);
-            }
-        });
+//        mPostListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                mAdapter.onItemClick(PostPageActivity.this, position);
+//            }
+//        });
 
     }
 
