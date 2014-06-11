@@ -1,0 +1,29 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".sections.UploadedPicsActivity">
+
+    <ProgressBar
+        android:id="@+id/progressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:visibility="visible"/>
+
+    <uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout
+        android:id="@+id/ptr_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <com.etsy.android.grid.StaggeredGridView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/grid_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:item_margin="5dp" />
+
+    </uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout>
+
+</FrameLayout>

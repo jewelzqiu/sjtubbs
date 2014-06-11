@@ -105,7 +105,8 @@ public class SectionsAdapter extends BaseExpandableListAdapter {
             showSubBoardsDialog(context, board.subBoardList);
         } else {
             Intent intent = new Intent(context, BoardActivity.class);
-            intent.putExtra(BoardActivity.BOARD_NAME, board.title);
+            intent.putExtra(BoardActivity.BOARD_TITLE, board.title);
+            intent.putExtra(BoardActivity.BOARD_NAME, board.name);
             intent.putExtra(BoardActivity.BOARD_URL, board.url);
             context.startActivity(intent);
         }

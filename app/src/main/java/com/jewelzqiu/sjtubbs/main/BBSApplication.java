@@ -25,6 +25,8 @@ public class BBSApplication extends Application {
 
     public static LinkedHashMap<String, Integer> imgUrlMap = new LinkedHashMap<String, Integer>();
 
+    public static ArrayList<String> imgUrlList = new ArrayList<String>();
+
     public static int screenWidth = -1;
 
     public static int screenHeight = -1;

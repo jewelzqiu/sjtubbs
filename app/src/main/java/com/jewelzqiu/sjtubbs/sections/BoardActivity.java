@@ -2,7 +2,6 @@ package com.jewelzqiu.sjtubbs.sections;
 
 import com.jewelzqiu.sjtubbs.R;
 import com.jewelzqiu.sjtubbs.support.GetPostsTask;
-import com.jewelzqiu.sjtubbs.support.GetTopTenTask;
 import com.jewelzqiu.sjtubbs.support.OnPostsGetListener;
 import com.jewelzqiu.sjtubbs.support.Post;
 import com.jewelzqiu.sjtubbs.support.PostListAdapter;
@@ -11,6 +10,7 @@ import com.jewelzqiu.sjtubbs.support.Utils;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
@@ -28,7 +28,9 @@ import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 
 
 public class BoardActivity extends Activity implements OnPostsGetListener,
-        AbsListView.OnScrollListener {
+        AbsListView.OnScrollListener, AdapterView.OnItemClickListener {
+
+    public static final String BOARD_TITLE = "board_title";
 
     public static final String BOARD_NAME = "board_name";
 
@@ -40,6 +42,8 @@ public class BoardActivity extends Activity implements OnPostsGetListener,
 
     private ListView mPostListView;
 
+    private ProgressBar mFooterView;
+
     private PostListAdapter mAdapter;
 
     private int visibleLastIndex;
@@ -48,7 +52,11 @@ public class BoardActivity extends Activity implements OnPostsGetListener,
 
     private String nextPageUrl = null;
 
-    boolean isRefresh = false;
+    private boolean isRefresh = false;
+
+    private String mBoardName;
+
+    private String boardUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,24 +70,32 @@ public class BoardActivity extends Activity implements OnPostsGetListener,
                     public void onRefreshStarted(View view) {
                         isRefresh = true;
                         lastPostId = -1;
-                        new GetTopTenTask(BoardActivity.this).execute(Utils.TYPE_TOP_TEN);
+                        new GetPostsTask(BoardActivity.this).execute(boardUrl);
                     }
                 })
                 .setup(mPullToRefreshLayout);
         mProgressBar = (ProgressBar) findViewById(R.id.progressbar);
         mPostListView = (ListView) findViewById(R.id.post_list);
         mPostListView.setOnScrollListener(this);
-        ProgressBar loadingView = (ProgressBar) getLayoutInflater()
-                .inflate(R.layout.progressbar_loading, null);
-        mPostListView.addFooterView(loadingView);
+        mPostListView.setOnItemClickListener(this);
+        mFooterView = (ProgressBar) getLayoutInflater().inflate(R.layout.progressbar_loading, null);
+        mPostListView.addFooterView(mFooterView);
 
         getActionBar().setDisplayShowHomeEnabled(true);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
-        setTitle(intent.getStringExtra(BOARD_NAME));
+        setTitle(intent.getStringExtra(BOARD_TITLE));
+        mBoardName = getIntent().getStringExtra(BOARD_NAME);
 
-        new GetPostsTask(this).execute(intent.getStringExtra(BOARD_URL));
+        boardUrl = intent.getStringExtra(BOARD_URL);
+        new GetPostsTask(this).execute(boardUrl);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.board, menu);
+        return true;
     }
 
     @Override
@@ -87,6 +103,13 @@ public class BoardActivity extends Activity implements OnPostsGetListener,
         int id = item.getItemId();
         if (id == android.R.id.home) {
             finish();
+            return true;
+        } else if (id == R.id.action_uploaded) {
+            Intent intent = new Intent(this, UploadedPicsActivity.class);
+            intent.putExtra(UploadedPicsActivity.UPLOADED_URL,
+                    Utils.BBS_BASE_URL + "/bbsfdoc2?board=" + mBoardName);
+            intent.putExtra(BOARD_TITLE, getTitle());
+            startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -96,16 +119,16 @@ public class BoardActivity extends Activity implements OnPostsGetListener,
     public void onPostsGet(ArrayList<Post> posts, String nextUrl) {
         mPullToRefreshLayout.setRefreshComplete();
         nextPageUrl = nextUrl;
-        System.out.println(nextUrl);
         mProgressBar.setVisibility(View.GONE);
         mPostListView.setVisibility(View.VISIBLE);
         if (posts == null) {
             Toast.makeText(this, "Network error", Toast.LENGTH_SHORT).show();
+            mFooterView.setVisibility(View.INVISIBLE);
             return;
         }
 
         if (lastPostId >= 0) {
-            for (Iterator<Post> iterator = posts.iterator(); iterator.hasNext();) {
+            for (Iterator<Post> iterator = posts.iterator(); iterator.hasNext(); ) {
                 try {
                     int temp = Integer.parseInt(iterator.next().board);
                     if (temp >= lastPostId) {
@@ -125,12 +148,11 @@ public class BoardActivity extends Activity implements OnPostsGetListener,
         } else {
             mAdapter.appendData(posts);
         }
-        mPostListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                mAdapter.onItemClick(i, BoardActivity.this);
-            }
-        });
+        if (posts.isEmpty()) {
+            mFooterView.setVisibility(View.INVISIBLE);
+        } else {
+            mFooterView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -145,5 +167,10 @@ public class BoardActivity extends Activity implements OnPostsGetListener,
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
             int totalItemCount) {
         visibleLastIndex = firstVisibleItem + visibleItemCount - 1;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        mAdapter.onItemClick(position, this);
     }
 }

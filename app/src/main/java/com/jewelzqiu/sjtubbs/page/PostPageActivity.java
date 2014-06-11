@@ -91,6 +91,7 @@ public class PostPageActivity extends Activity implements AbsListView.OnScrollLi
         originalUrl = getIntent().getStringExtra(POST_URL);
 
         BBSApplication.imgUrlMap.clear();
+        BBSApplication.imgUrlList.clear();
         new PrepareContentTask().execute(originalUrl);
     }
 
@@ -132,6 +133,11 @@ public class PostPageActivity extends Activity implements AbsListView.OnScrollLi
                     mPostListView.setAdapter(mAdapter);
                 } else {
                     mAdapter.appendPosts(postList);
+                }
+                if (postList.isEmpty()) {
+                    mFooterView.setVisibility(View.INVISIBLE);
+                } else {
+                    mFooterView.setVisibility(View.VISIBLE);
                 }
                 break;
 
@@ -186,6 +192,7 @@ public class PostPageActivity extends Activity implements AbsListView.OnScrollLi
                     img.attr("src", src);
                     int pos = BBSApplication.imgUrlMap.size();
                     BBSApplication.imgUrlMap.put(src, pos);
+                    BBSApplication.imgUrlList.add(src);
                 }
 
                 Elements posts = doc.getElementsByTag("pre");

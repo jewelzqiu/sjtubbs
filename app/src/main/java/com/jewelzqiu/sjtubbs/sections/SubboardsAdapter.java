@@ -59,7 +59,8 @@ public class SubboardsAdapter extends BaseAdapter {
     public void onItemClick(Context context, int position) {
         Board board = mBoards.get(position);
         Intent intent = new Intent(mContext, BoardActivity.class);
-        intent.putExtra(BoardActivity.BOARD_NAME, board.title);
+        intent.putExtra(BoardActivity.BOARD_TITLE, board.title);
+        intent.putExtra(BoardActivity.BOARD_NAME, board.name);
         intent.putExtra(BoardActivity.BOARD_URL, board.url);
         mContext.startActivity(intent);
     }

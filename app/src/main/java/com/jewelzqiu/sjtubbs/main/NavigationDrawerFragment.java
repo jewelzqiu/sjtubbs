@@ -225,6 +225,18 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
+    public void openDrawer() {
+        if (mDrawerLayout != null) {
+            mDrawerLayout.openDrawer(mFragmentContainerView);
+        }
+    }
+
+    public void closeDrawer() {
+        if (mDrawerLayout != null) {
+            mDrawerLayout.closeDrawer(mFragmentContainerView);
+        }
+    }
+
 //    @Override
 //    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 //        // If the drawer is open, show the global app actions in the action bar. See also

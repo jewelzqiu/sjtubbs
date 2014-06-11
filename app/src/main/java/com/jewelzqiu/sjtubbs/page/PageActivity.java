@@ -48,6 +48,7 @@ public class PageActivity extends Activity {
         mWebView.setWebChromeClient(new WebChromeClient());
         mWebView.setWebViewClient(new MyWebViewClient());
         BBSApplication.imgUrlMap.clear();
+        BBSApplication.imgUrlList.clear();
         new PrepareContentTask(mWebView).execute(getIntent().getStringExtra(POST_CONTENT));
 
         setTitle(getIntent().getStringExtra(PAGE_TITLE));
@@ -113,7 +114,9 @@ public class PageActivity extends Activity {
             for (Element img : imgs) {
                 img.wrap("<a href='" + img.attr("src") + "'></a>");
                 int pos = BBSApplication.imgUrlMap.size();
-                BBSApplication.imgUrlMap.put(Utils.BBS_BASE_URL + img.attr("src"), pos);
+                String url = Utils.BBS_BASE_URL + img.attr("src");
+                BBSApplication.imgUrlMap.put(url, pos);
+                BBSApplication.imgUrlList.add(url);
             }
             content = doc.outerHtml();
 

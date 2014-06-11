@@ -22,7 +22,7 @@ public class PicActivity extends Activity {
 
         mViewPager = (HackyViewPager) findViewById(R.id.view_pager);
         setContentView(mViewPager);
-        mViewPager.setAdapter(new PicPagerAdapter(this, BBSApplication.imgUrlMap));
+        mViewPager.setAdapter(new PicPagerAdapter(this, BBSApplication.imgUrlList));
         mViewPager.setCurrentItem(getIntent().getIntExtra(PHOTO_POSITION, 0));
 
         if (savedInstanceState != null) {

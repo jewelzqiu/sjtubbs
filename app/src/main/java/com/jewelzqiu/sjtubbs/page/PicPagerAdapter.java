@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 
 import uk.co.senab.photoview.PhotoView;
 import uk.co.senab.photoview.PhotoViewAttacher;
@@ -20,14 +19,11 @@ public class PicPagerAdapter extends PagerAdapter {
 
     private Activity mActivity;
 
-    private ArrayList<String> urlList = new ArrayList<String>();
+    private ArrayList<String> urlList;
 
-    public PicPagerAdapter(Activity activity, LinkedHashMap<String, Integer> urlSet) {
+    public PicPagerAdapter(Activity activity, ArrayList<String> urlList) {
         mActivity = activity;
-        urlList.clear();
-        for (String url : urlSet.keySet()) {
-            urlList.add(url);
-        }
+        this.urlList = urlList;
     }
 
     @Override
