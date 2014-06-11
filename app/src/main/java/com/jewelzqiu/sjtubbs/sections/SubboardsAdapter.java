@@ -2,6 +2,7 @@ package com.jewelzqiu.sjtubbs.sections;
 
 import com.jewelzqiu.sjtubbs.R;
 import com.jewelzqiu.sjtubbs.support.Board;
+import com.jewelzqiu.sjtubbs.support.DatabaseHelper;
 
 import android.content.Context;
 import android.content.Intent;
@@ -63,5 +64,7 @@ public class SubboardsAdapter extends BaseAdapter {
         intent.putExtra(BoardActivity.BOARD_NAME, board.name);
         intent.putExtra(BoardActivity.BOARD_URL, board.url);
         mContext.startActivity(intent);
+        DatabaseHelper dbHelper = new DatabaseHelper(mContext);
+        dbHelper.insert(board);
     }
 }

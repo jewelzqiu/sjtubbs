@@ -2,6 +2,7 @@ package com.jewelzqiu.sjtubbs.sections;
 
 import com.jewelzqiu.sjtubbs.R;
 import com.jewelzqiu.sjtubbs.support.Board;
+import com.jewelzqiu.sjtubbs.support.DatabaseHelper;
 import com.jewelzqiu.sjtubbs.support.Section;
 
 import android.app.Dialog;
@@ -109,6 +110,8 @@ public class SectionsAdapter extends BaseExpandableListAdapter {
             intent.putExtra(BoardActivity.BOARD_NAME, board.name);
             intent.putExtra(BoardActivity.BOARD_URL, board.url);
             context.startActivity(intent);
+            DatabaseHelper dbHelper = new DatabaseHelper(mContext);
+            dbHelper.insert(board);
         }
     }
 

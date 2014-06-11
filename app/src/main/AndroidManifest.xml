@@ -38,6 +38,7 @@
             android:name=".sections.UploadedPicsActivity"
             android:label="@string/title_activity_uploaded_pics" >
         </activity>
+
     </application>
 
 </manifest>

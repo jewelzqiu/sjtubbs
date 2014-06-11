@@ -3,7 +3,8 @@
 
     <string-array name="drawer_list_title">
         <item>今日十大</item>
-        <item>讨论区</item>
+        <item>常用板块</item>
+        <item>全部讨论区</item>
         <item>设置</item>
     </string-array>
     

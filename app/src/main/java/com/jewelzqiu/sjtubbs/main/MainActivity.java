@@ -1,6 +1,7 @@
 package com.jewelzqiu.sjtubbs.main;
 
 import com.jewelzqiu.sjtubbs.R;
+import com.jewelzqiu.sjtubbs.frequent.FrequentFragment;
 import com.jewelzqiu.sjtubbs.sections.SectionsFragment;
 import com.jewelzqiu.sjtubbs.settings.SettingsFragment;
 import com.jewelzqiu.sjtubbs.support.GetSectionsTask;
@@ -36,6 +37,8 @@ public class MainActivity extends Activity
     public static String[] drawerListTitles;
 
     private TopTenFragment mTopTenFragment;
+
+    private FrequentFragment mFrequentFragment;
 
     private SectionsFragment mSectionsFragment;
 
@@ -75,12 +78,18 @@ public class MainActivity extends Activity
                 fragment = mTopTenFragment;
                 break;
             case 1:
+                if (mFrequentFragment == null) {
+                    mFrequentFragment = new FrequentFragment();
+                }
+                fragment = mFrequentFragment;
+                break;
+            case 2:
                 if (mSectionsFragment == null) {
                     mSectionsFragment = new SectionsFragment();
                 }
                 fragment = mSectionsFragment;
                 break;
-            case 2:
+            case 3:
                 if (mSettingsFragment == null) {
                     mSettingsFragment = new SettingsFragment();
                 }
