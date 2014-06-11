@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/about">
+
+        <Preference
+            android:title="@string/creator"
+            android:summary="@string/creator_name" />
+
+        <Preference
+            android:key="@string/key_github"
+            android:title="@string/github"
+            android:summary="https://github.com/Jewelzqiu/sjtubbs" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

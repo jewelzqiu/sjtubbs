@@ -5,9 +5,6 @@
     <string name="frequent_used">常用</string>
     <string name="action_pic">看图</string>
     <string name="action_uploaded">上载区</string>
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
@@ -20,5 +17,10 @@
     <string name="title_activity_pic">PicActivity</string>
     <string name="title_activity_post_page">PostPageActivity</string>
     <string name="title_activity_uploaded_pics">上载区</string>
+    <string name="about">关于</string>
+    <string name="creator">作者</string>
+    <string name="creator_name">\@Jewelzqiu</string>
+    <string name="key_github">key_github</string>
+    <string name="github">Github</string>
 
 </resources>
