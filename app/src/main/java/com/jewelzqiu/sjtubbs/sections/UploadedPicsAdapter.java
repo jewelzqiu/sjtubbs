@@ -56,7 +56,7 @@ public class UploadedPicsAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        DynamicHeightImageView imageView;
+        final DynamicHeightImageView imageView;
         if (convertView == null) {
             imageView = (DynamicHeightImageView) mInflater
                     .inflate(R.layout.uploaded_list_item, null);
@@ -67,7 +67,12 @@ public class UploadedPicsAdapter extends BaseAdapter {
         double positionHeight = getPositionRatio(position);
         imageView.setHeightRatio(positionHeight);
 
-        Ion.with(imageView).load(BBSApplication.imgUrlList.get(position));
+        final int viewWidth = BBSApplication.gridViewPicWidth;
+        final int viewHeight = (int) (viewWidth * positionHeight);
+        Ion.with(imageView)
+                .resize(viewWidth, viewHeight)
+                .centerCrop()
+                .load(BBSApplication.imgUrlList.get(position));
         return imageView;
     }
 

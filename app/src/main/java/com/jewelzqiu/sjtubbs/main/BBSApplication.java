@@ -33,19 +33,21 @@ public class BBSApplication extends Application {
 
     public static int contentWidth = -1;
 
+    public static int gridViewPicWidth = -1;
+
     @Override
     public void onCreate() {
         super.onCreate();
-        getSize();
+        getSize(getResources().getConfiguration().orientation);
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        getSize();
+        getSize(newConfig.orientation);
     }
 
-    private void getSize() {
+    private void getSize(int orientation) {
         WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();
         Point size = new Point();
@@ -54,5 +56,12 @@ public class BBSApplication extends Application {
         screenHeight = size.y;
         contentWidth = (int) (BBSApplication.screenWidth
                 - getResources().getDimension(R.dimen.activity_horizontal_margin) * 2);
+        gridViewPicWidth = (int) ((screenWidth - 3 * 5 * getResources()
+                .getDisplayMetrics().density));
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            gridViewPicWidth /= 3;
+        } else {
+            gridViewPicWidth /= 2;
+        }
     }
 }
