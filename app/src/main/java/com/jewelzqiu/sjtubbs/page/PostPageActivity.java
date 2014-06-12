@@ -72,7 +72,7 @@ public class PostPageActivity extends Activity implements AbsListView.OnScrollLi
                 .listener(new OnRefreshListener() {
                     @Override
                     public void onRefreshStarted(View view) {
-                        new PrepareContentTask().execute(originalUrl);
+                        new PrepareContentTask(true).execute(originalUrl);
                         mFooterView.setVisibility(View.VISIBLE);
                     }
                 })
@@ -92,7 +92,7 @@ public class PostPageActivity extends Activity implements AbsListView.OnScrollLi
 
         BBSApplication.imgUrlMap.clear();
         BBSApplication.imgUrlList.clear();
-        new PrepareContentTask().execute(originalUrl);
+        new PrepareContentTask(true).execute(originalUrl);
     }
 
     @Override
@@ -118,7 +118,7 @@ public class PostPageActivity extends Activity implements AbsListView.OnScrollLi
         return super.onOptionsItemSelected(item);
     }
 
-    private void onPostListGet(ArrayList<String> postList, int result) {
+    private void onPostListGet(ArrayList<String> postList, int result, boolean clear) {
         mPullToRefreshLayout.setRefreshComplete();
         mProgressBar.setVisibility(View.GONE);
         mPostListView.setVisibility(View.VISIBLE);
@@ -128,13 +128,13 @@ public class PostPageActivity extends Activity implements AbsListView.OnScrollLi
                 break;
 
             case FLAG_OK:
-                if (mAdapter == null) {
+                if (clear || mAdapter == null) {
                     mAdapter = new PostPageAdapter(this, postList);
                     mPostListView.setAdapter(mAdapter);
                 } else {
                     mAdapter.appendPosts(postList);
                 }
-                if (postList.isEmpty()) {
+                if (nextPageUrl == null || postList.isEmpty()) {
                     mFooterView.setVisibility(View.INVISIBLE);
                 } else {
                     mFooterView.setVisibility(View.VISIBLE);
@@ -158,7 +158,7 @@ public class PostPageActivity extends Activity implements AbsListView.OnScrollLi
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE
                 && visibleLastIndex == mAdapter.getCount()) {
-            new PrepareContentTask().execute(nextPageUrl);
+            new PrepareContentTask(false).execute(nextPageUrl);
         }
     }
 
@@ -172,7 +172,13 @@ public class PostPageActivity extends Activity implements AbsListView.OnScrollLi
 
         private String url;
 
-        ArrayList<String> postList = new ArrayList<String>();
+        private ArrayList<String> postList = new ArrayList<String>();
+
+        private boolean clear;
+
+        public PrepareContentTask(boolean clear) {
+            this.clear = clear;
+        }
 
         @Override
         protected Integer doInBackground(String... params) {
@@ -219,7 +225,7 @@ public class PostPageActivity extends Activity implements AbsListView.OnScrollLi
 
         @Override
         protected void onPostExecute(Integer result) {
-            onPostListGet(postList, result);
+            onPostListGet(postList, result, clear);
         }
     }
 }
