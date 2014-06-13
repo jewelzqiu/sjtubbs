@@ -197,7 +197,9 @@ public class PostPageActivity extends Activity implements AbsListView.OnScrollLi
                 Elements imgs = doc.select("img");
                 for (Element img : imgs) {
                     String src = img.attr("src");
-                    src = Utils.BBS_BASE_URL + src;
+                    if (!src.toLowerCase().startsWith("http")) {
+                        src = Utils.BBS_BASE_URL + src;
+                    }
                     img.attr("src", src);
                     int pos = BBSApplication.imgUrlMap.size();
                     BBSApplication.imgUrlMap.put(src, pos);
@@ -207,8 +209,12 @@ public class PostPageActivity extends Activity implements AbsListView.OnScrollLi
                 Elements posts = doc.getElementsByTag("pre");
                 for (Element post : posts) {
                     String postContent = post.html().replace("\n", "<br />");
-                    postContent = postContent.substring(postContent.indexOf(']') + 2);
-                    postList.add(postContent);
+                    try {
+                        postContent = postContent.substring(postContent.indexOf(']') + 2);
+                        postList.add(postContent);
+                    } catch (IndexOutOfBoundsException e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 Elements links = doc.select("body > a");
