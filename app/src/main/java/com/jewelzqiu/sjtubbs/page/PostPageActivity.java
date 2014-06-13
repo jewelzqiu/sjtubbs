@@ -97,6 +97,9 @@ public class PostPageActivity extends Activity implements AbsListView.OnScrollLi
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        if (BBSApplication.imgUrlMap.isEmpty()) {
+            return true;
+        }
         getMenuInflater().inflate(R.menu.post_page, menu);
         return true;
     }
@@ -225,6 +228,7 @@ public class PostPageActivity extends Activity implements AbsListView.OnScrollLi
 
         @Override
         protected void onPostExecute(Integer result) {
+            invalidateOptionsMenu();
             onPostListGet(postList, result, clear);
         }
     }
