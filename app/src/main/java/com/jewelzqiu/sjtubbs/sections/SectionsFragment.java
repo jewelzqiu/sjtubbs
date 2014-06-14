@@ -2,7 +2,6 @@ package com.jewelzqiu.sjtubbs.sections;
 
 import com.jewelzqiu.sjtubbs.R;
 import com.jewelzqiu.sjtubbs.main.BBSApplication;
-import com.jewelzqiu.sjtubbs.support.GetSectionsTask;
 import com.jewelzqiu.sjtubbs.support.OnSectionsGetListener;
 import com.jewelzqiu.sjtubbs.support.Section;
 

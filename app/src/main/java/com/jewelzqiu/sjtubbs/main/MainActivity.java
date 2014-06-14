@@ -4,7 +4,7 @@ import com.jewelzqiu.sjtubbs.R;
 import com.jewelzqiu.sjtubbs.frequent.FrequentFragment;
 import com.jewelzqiu.sjtubbs.sections.SectionsFragment;
 import com.jewelzqiu.sjtubbs.settings.SettingsFragment;
-import com.jewelzqiu.sjtubbs.support.GetSectionsTask;
+import com.jewelzqiu.sjtubbs.sections.GetSectionsTask;
 import com.jewelzqiu.sjtubbs.support.OnSectionsGetListener;
 import com.jewelzqiu.sjtubbs.support.Section;
 import com.jewelzqiu.sjtubbs.topten.TopTenFragment;

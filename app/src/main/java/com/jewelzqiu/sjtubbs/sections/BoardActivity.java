@@ -1,7 +1,6 @@
 package com.jewelzqiu.sjtubbs.sections;
 
 import com.jewelzqiu.sjtubbs.R;
-import com.jewelzqiu.sjtubbs.support.GetPostsTask;
 import com.jewelzqiu.sjtubbs.support.OnPostsGetListener;
 import com.jewelzqiu.sjtubbs.support.Post;
 import com.jewelzqiu.sjtubbs.support.PostListAdapter;

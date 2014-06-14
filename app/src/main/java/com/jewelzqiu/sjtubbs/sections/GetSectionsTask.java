@@ -1,4 +1,9 @@
-package com.jewelzqiu.sjtubbs.support;
+package com.jewelzqiu.sjtubbs.sections;
+
+import com.jewelzqiu.sjtubbs.support.Board;
+import com.jewelzqiu.sjtubbs.support.OnSectionsGetListener;
+import com.jewelzqiu.sjtubbs.support.Section;
+import com.jewelzqiu.sjtubbs.support.Utils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

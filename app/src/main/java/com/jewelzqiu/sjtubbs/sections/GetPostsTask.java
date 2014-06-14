@@ -1,4 +1,8 @@
-package com.jewelzqiu.sjtubbs.support;
+package com.jewelzqiu.sjtubbs.sections;
+
+import com.jewelzqiu.sjtubbs.support.OnPostsGetListener;
+import com.jewelzqiu.sjtubbs.support.Post;
+import com.jewelzqiu.sjtubbs.support.Utils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

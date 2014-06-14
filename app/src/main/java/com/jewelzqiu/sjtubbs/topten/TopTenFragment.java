@@ -2,7 +2,6 @@ package com.jewelzqiu.sjtubbs.topten;
 
 import com.jewelzqiu.sjtubbs.R;
 import com.jewelzqiu.sjtubbs.main.BBSApplication;
-import com.jewelzqiu.sjtubbs.support.GetTopTenTask;
 import com.jewelzqiu.sjtubbs.support.OnPostsGetListener;
 import com.jewelzqiu.sjtubbs.support.Post;
 import com.jewelzqiu.sjtubbs.support.PostListAdapter;
