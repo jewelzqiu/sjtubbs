@@ -206,9 +206,15 @@ public class PostPageActivity extends Activity implements AbsListView.OnScrollLi
                     BBSApplication.imgUrlList.add(src);
                 }
 
+                boolean special = url.startsWith(Utils.BBS_BASE_URL + "/bbstopcon");
+
                 Elements posts = doc.getElementsByTag("pre");
                 for (Element post : posts) {
                     String postContent = post.html().replace("\n", "<br />");
+                    if (special) {
+                        postList.add(postContent);
+                        continue;
+                    }
                     try {
                         postContent = postContent.substring(postContent.indexOf(']') + 2);
                         postList.add(postContent);
