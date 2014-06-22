@@ -3,6 +3,7 @@ package com.jewelzqiu.sjtubbs.page;
 import com.jewelzqiu.sjtubbs.R;
 import com.jewelzqiu.sjtubbs.main.BBSApplication;
 import com.jewelzqiu.sjtubbs.support.Utils;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -93,6 +94,12 @@ public class PostPageActivity extends Activity implements AbsListView.OnScrollLi
         BBSApplication.imgUrlMap.clear();
         BBSApplication.imgUrlList.clear();
         new PrepareContentTask(true).execute(originalUrl);
+
+        SystemBarTintManager tintManager = new SystemBarTintManager(this);
+        tintManager.setStatusBarTintEnabled(true);
+        tintManager.setNavigationBarTintEnabled(true);
+        tintManager.setTintColor(getResources().getColor(android.R.color.holo_blue_dark));
+        tintManager.setNavigationBarAlpha(0.7f);
     }
 
     @Override

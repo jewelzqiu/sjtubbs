@@ -5,6 +5,7 @@ import com.jewelzqiu.sjtubbs.support.OnPostsGetListener;
 import com.jewelzqiu.sjtubbs.support.Post;
 import com.jewelzqiu.sjtubbs.support.PostListAdapter;
 import com.jewelzqiu.sjtubbs.support.Utils;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -89,6 +90,12 @@ public class BoardActivity extends Activity implements OnPostsGetListener,
 
         boardUrl = intent.getStringExtra(BOARD_URL);
         new GetPostsTask(this).execute(boardUrl);
+
+        SystemBarTintManager tintManager = new SystemBarTintManager(this);
+        tintManager.setStatusBarTintEnabled(true);
+        tintManager.setNavigationBarTintEnabled(true);
+        tintManager.setTintColor(getResources().getColor(android.R.color.holo_blue_dark));
+        tintManager.setNavigationBarAlpha(0.7f);
     }
 
     @Override

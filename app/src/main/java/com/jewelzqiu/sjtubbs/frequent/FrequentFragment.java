@@ -4,6 +4,7 @@ package com.jewelzqiu.sjtubbs.frequent;
 
 import com.jewelzqiu.sjtubbs.R;
 import com.jewelzqiu.sjtubbs.support.DatabaseHelper;
+import com.jewelzqiu.sjtubbs.support.Utils;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -50,5 +51,14 @@ public class FrequentFragment extends Fragment {
         DatabaseHelper dbHelper = new DatabaseHelper(mContext);
         mAdapter = new FrequentListAdapter(mContext, dbHelper.query(), true);
         mFrequentListView.setAdapter(mAdapter);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+//        mFrequentListView = (ListView) view.findViewById(R.id.section_list);
+        mFrequentListView.setFitsSystemWindows(true);
+        mFrequentListView.setClipToPadding(false);
+        Utils.setInsets(getActivity(), mFrequentListView);
     }
 }

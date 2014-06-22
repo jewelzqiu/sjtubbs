@@ -3,6 +3,8 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/SJTUActionBar</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">@bool/transparent_nav</item>
     </style>
 
     <style name="SJTUActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">

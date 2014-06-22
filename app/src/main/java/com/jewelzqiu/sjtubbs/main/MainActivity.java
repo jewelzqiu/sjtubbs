@@ -8,6 +8,7 @@ import com.jewelzqiu.sjtubbs.sections.GetSectionsTask;
 import com.jewelzqiu.sjtubbs.support.OnSectionsGetListener;
 import com.jewelzqiu.sjtubbs.support.Section;
 import com.jewelzqiu.sjtubbs.topten.TopTenFragment;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -62,6 +63,12 @@ public class MainActivity extends Activity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
         new GetSectionsTask(this).execute();
+
+        SystemBarTintManager tintManager = new SystemBarTintManager(this);
+        tintManager.setStatusBarTintEnabled(true);
+        tintManager.setNavigationBarTintEnabled(true);
+        tintManager.setTintColor(getResources().getColor(android.R.color.holo_blue_dark));
+        tintManager.setNavigationBarAlpha(0.7f);
     }
 
     @Override

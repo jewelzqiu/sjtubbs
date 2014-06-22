@@ -100,6 +100,15 @@ public class TopTenFragment extends Fragment implements OnPostsGetListener {
 //    }
 
     @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+//        mTopTenListView = (ListView) view.findViewById(R.id.post_list);
+        mTopTenListView.setFitsSystemWindows(true);
+        mTopTenListView.setClipToPadding(false);
+        Utils.setInsets(getActivity(), mTopTenListView);
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(TOP_TEN_DATA, mPosts);

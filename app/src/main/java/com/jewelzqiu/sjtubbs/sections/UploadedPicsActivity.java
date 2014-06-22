@@ -4,6 +4,7 @@ import com.etsy.android.grid.StaggeredGridView;
 import com.jewelzqiu.sjtubbs.R;
 import com.jewelzqiu.sjtubbs.main.BBSApplication;
 import com.jewelzqiu.sjtubbs.support.Utils;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -82,6 +83,12 @@ public class UploadedPicsActivity extends Activity implements AbsListView.OnScro
         BBSApplication.imgUrlMap.clear();
 
         new GetUploadedPicsTask(true).execute(mUploadedUrl);
+
+        SystemBarTintManager tintManager = new SystemBarTintManager(this);
+        tintManager.setStatusBarTintEnabled(true);
+        tintManager.setNavigationBarTintEnabled(true);
+        tintManager.setTintColor(getResources().getColor(android.R.color.holo_blue_dark));
+        tintManager.setNavigationBarAlpha(0.7f);
     }
 
 //    @Override

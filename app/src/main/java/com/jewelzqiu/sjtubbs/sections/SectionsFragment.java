@@ -4,6 +4,7 @@ import com.jewelzqiu.sjtubbs.R;
 import com.jewelzqiu.sjtubbs.main.BBSApplication;
 import com.jewelzqiu.sjtubbs.support.OnSectionsGetListener;
 import com.jewelzqiu.sjtubbs.support.Section;
+import com.jewelzqiu.sjtubbs.support.Utils;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -85,6 +86,15 @@ public class SectionsFragment extends Fragment implements OnSectionsGetListener 
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mContext = activity;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+//        mSectionListView = (ExpandableListView) view.findViewById(R.id.section_list);
+        mSectionListView.setFitsSystemWindows(true);
+        mSectionListView.setClipToPadding(false);
+        Utils.setInsets(getActivity(), mSectionListView);
     }
 
     @Override

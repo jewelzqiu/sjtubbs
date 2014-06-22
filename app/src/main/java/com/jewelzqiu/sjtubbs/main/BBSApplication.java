@@ -54,7 +54,7 @@ public class BBSApplication extends Application {
         display.getSize(size);
         screenWidth = size.x;
         screenHeight = size.y;
-        contentWidth = (int) (BBSApplication.screenWidth
+        contentWidth = (int) (screenWidth
                 - getResources().getDimension(R.dimen.activity_horizontal_margin) * 2);
         gridViewPicWidth = (int) ((screenWidth - 3 * 5 * getResources()
                 .getDisplayMetrics().density));
