@@ -88,7 +88,7 @@ public class UploadedPicsActivity extends Activity implements AbsListView.OnScro
         tintManager.setStatusBarTintEnabled(true);
         tintManager.setNavigationBarTintEnabled(true);
         tintManager.setTintColor(getResources().getColor(android.R.color.holo_blue_dark));
-        tintManager.setNavigationBarAlpha(0.7f);
+        tintManager.setTintAlpha(0.69f);
     }
 
 //    @Override

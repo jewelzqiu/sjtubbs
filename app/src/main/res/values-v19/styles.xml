@@ -8,7 +8,7 @@
     </style>
 
     <style name="SJTUActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">@android:color/holo_blue_dark</item>
+        <item name="android:background">#b00099cc</item>
     </style>
 
     <style name="PicBrowserTheme" parent="android:Theme.Holo.NoActionBar.Fullscreen">
