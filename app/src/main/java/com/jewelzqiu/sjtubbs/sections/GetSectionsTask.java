@@ -1,5 +1,6 @@
 package com.jewelzqiu.sjtubbs.sections;
 
+import com.jewelzqiu.sjtubbs.main.BBSApplication;
 import com.jewelzqiu.sjtubbs.support.Board;
 import com.jewelzqiu.sjtubbs.support.OnSectionsGetListener;
 import com.jewelzqiu.sjtubbs.support.Section;
@@ -46,6 +47,8 @@ public class GetSectionsTask extends AsyncTask<Void, Void, Boolean> {
     private void parseSections(Elements elements) throws IOException {
         String sectionUrl, name;
         ArrayList<Board> boardList;
+        BBSApplication.boardMap.clear();
+        BBSApplication.boardNameList.clear();
 
         for (int i = 1; i < elements.size(); i++) {
             Element element = elements.get(i);
@@ -75,7 +78,12 @@ public class GetSectionsTask extends AsyncTask<Void, Void, Boolean> {
                 subBoards = parseBoards(boardUrl);
                 result.add(new Board(title, name, boardUrl, subBoards));
             } else {
-                result.add(new Board(title, name, boardUrl.replace("bbsdoc", "bbstdoc")));
+                Board temp = new Board(title, name, boardUrl.replace("bbsdoc", "bbstdoc"));
+                result.add(temp);
+                BBSApplication.boardMap.put(title, temp);
+                BBSApplication.boardMap.put(name, temp);
+                BBSApplication.boardNameList.add(title);
+                BBSApplication.boardNameList.add(name);
             }
         }
         return result;

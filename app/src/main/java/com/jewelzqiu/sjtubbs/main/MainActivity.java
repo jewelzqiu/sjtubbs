@@ -37,6 +37,8 @@ public class MainActivity extends Activity
 
     public static String[] drawerListTitles;
 
+    private Fragment mFragment;
+
     private TopTenFragment mTopTenFragment;
 
     private FrequentFragment mFrequentFragment;
@@ -76,37 +78,36 @@ public class MainActivity extends Activity
         mCurrentItem = position;
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getFragmentManager();
-        Fragment fragment = null;
         switch (position) {
             case 0:
                 if (mTopTenFragment == null) {
                     mTopTenFragment = new TopTenFragment();
                 }
-                fragment = mTopTenFragment;
+                mFragment = mTopTenFragment;
                 break;
             case 1:
                 if (mFrequentFragment == null) {
                     mFrequentFragment = new FrequentFragment();
                 }
-                fragment = mFrequentFragment;
+                mFragment = mFrequentFragment;
                 break;
             case 2:
                 if (mSectionsFragment == null) {
                     mSectionsFragment = new SectionsFragment();
                 }
-                fragment = mSectionsFragment;
+                mFragment = mSectionsFragment;
                 break;
             case 3:
                 if (mSettingsFragment == null) {
                     mSettingsFragment = new SettingsFragment();
                 }
-                fragment = mSettingsFragment;
+                mFragment = mSettingsFragment;
                 break;
         }
         mTitle = drawerListTitles[position];
         setTitle(mTitle);
-        if (fragment != null) {
-            fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+        if (mFragment != null) {
+            fragmentManager.beginTransaction().replace(R.id.container, mFragment).commit();
         }
     }
 
@@ -115,6 +116,24 @@ public class MainActivity extends Activity
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);
+        if (mFragment == mSectionsFragment) {
+            if (mNavigationDrawerFragment.isDrawerOpen()) {
+                actionBar.setDisplayOptions(
+                        ActionBar.DISPLAY_USE_LOGO
+                                | ActionBar.DISPLAY_SHOW_TITLE
+                                | ActionBar.DISPLAY_SHOW_HOME
+                                | ActionBar.DISPLAY_HOME_AS_UP
+                );
+            } else {
+                actionBar.setDisplayOptions(
+                        ActionBar.DISPLAY_SHOW_CUSTOM
+                                | ActionBar.DISPLAY_USE_LOGO
+                                | ActionBar.DISPLAY_SHOW_HOME
+                                | ActionBar.DISPLAY_HOME_AS_UP
+                );
+                mSectionsFragment.resetActionBar();
+            }
+        }
     }
 
     @Override
@@ -133,18 +152,6 @@ public class MainActivity extends Activity
         BBSApplication.sectionList = list;
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        if (!mNavigationDrawerFragment.isDrawerOpen()) {
-//            // Only show items in the action bar relevant to this screen
-//            // if the drawer is not showing. Otherwise, let the drawer
-//            // decide what to show in the action bar.
-//            restoreActionBar();
-//            return true;
-//        }
-//        return super.onCreateOptionsMenu(menu);
-//    }
-//
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -159,5 +166,12 @@ public class MainActivity extends Activity
         return super.onOptionsItemSelected(item);
     }
 
-
+    @Override
+    public void onBackPressed() {
+        if (mFragment == mSectionsFragment && mSectionsFragment.isSearching()) {
+            mSectionsFragment.resetActionBar();
+            return;
+        }
+        super.onBackPressed();
+    }
 }

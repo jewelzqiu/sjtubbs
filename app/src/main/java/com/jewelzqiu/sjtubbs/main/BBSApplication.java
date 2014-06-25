@@ -1,6 +1,7 @@
 package com.jewelzqiu.sjtubbs.main;
 
 import com.jewelzqiu.sjtubbs.R;
+import com.jewelzqiu.sjtubbs.support.Board;
 import com.jewelzqiu.sjtubbs.support.Post;
 import com.jewelzqiu.sjtubbs.support.Section;
 
@@ -12,6 +13,7 @@ import android.view.Display;
 import android.view.WindowManager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 /**
@@ -26,6 +28,10 @@ public class BBSApplication extends Application {
     public static LinkedHashMap<String, Integer> imgUrlMap = new LinkedHashMap<String, Integer>();
 
     public static ArrayList<String> imgUrlList = new ArrayList<String>();
+
+    public static HashMap<String, Board> boardMap = new HashMap<String, Board>();
+
+    public static ArrayList<String> boardNameList = new ArrayList<String>();
 
     public static int screenWidth = -1;
 

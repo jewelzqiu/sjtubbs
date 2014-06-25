@@ -2,19 +2,28 @@ package com.jewelzqiu.sjtubbs.sections;
 
 import com.jewelzqiu.sjtubbs.R;
 import com.jewelzqiu.sjtubbs.main.BBSApplication;
+import com.jewelzqiu.sjtubbs.support.Board;
 import com.jewelzqiu.sjtubbs.support.OnSectionsGetListener;
 import com.jewelzqiu.sjtubbs.support.Section;
 import com.jewelzqiu.sjtubbs.support.Utils;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.ExpandableListView;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -42,17 +51,23 @@ public class SectionsFragment extends Fragment implements OnSectionsGetListener 
 
     private SectionsAdapter mAdapter;
 
+    private View normalView;
+
+    private ImageButton searchButton;
+
+    private View searchView;
+
+    private AutoCompleteTextView searchTextView;
+
+    private ImageButton clearButton;
+
+    private ArrayAdapter<String> mSearchAdapter;
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
     public SectionsFragment() {
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -74,11 +89,58 @@ public class SectionsFragment extends Fragment implements OnSectionsGetListener 
         if (savedInstanceState != null) {
             mSections = savedInstanceState.getParcelableArrayList(SECTION_DATA);
             onSectionsGet(BBSApplication.sectionList);
-        } else if(BBSApplication.sectionList != null) {
+        } else if (BBSApplication.sectionList != null) {
             onSectionsGet(BBSApplication.sectionList);
         } else {
             new GetSectionsTask(this).execute();
         }
+
+        getActivity().getActionBar().setDisplayOptions(
+                ActionBar.DISPLAY_SHOW_CUSTOM |
+                        ActionBar.DISPLAY_USE_LOGO |
+                        ActionBar.DISPLAY_SHOW_HOME |
+                        ActionBar.DISPLAY_HOME_AS_UP
+        );
+
+        searchView = inflater.inflate(R.layout.actionbar_search, null);
+        searchTextView = (AutoCompleteTextView) searchView.findViewById(R.id.search_view);
+        clearButton = (ImageButton) searchView.findViewById(R.id.clear_button);
+        clearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchTextView.setText("");
+            }
+        });
+        mSearchAdapter = new ArrayAdapter<String>(mContext,
+                android.R.layout.simple_dropdown_item_1line, BBSApplication.boardNameList);
+        searchTextView.setAdapter(mSearchAdapter);
+        searchTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String boardName = (String) ((TextView) view).getText();
+                Board board = BBSApplication.boardMap.get(boardName);
+                Intent intent = new Intent(mContext, BoardActivity.class);
+                intent.putExtra(BoardActivity.BOARD_TITLE, board.title);
+                intent.putExtra(BoardActivity.BOARD_NAME, board.name);
+                intent.putExtra(BoardActivity.BOARD_URL, board.url);
+                mContext.startActivity(intent);
+                resetActionBar();
+            }
+        });
+
+        normalView = inflater.inflate(R.layout.actionbar_normal, null);
+        searchButton = (ImageButton) normalView.findViewById(R.id.search_button);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getActionBar().setCustomView(searchView);
+                searchTextView.requestFocus();
+                InputMethodManager imm = (InputMethodManager) mContext
+                        .getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(searchTextView, InputMethodManager.SHOW_IMPLICIT);
+            }
+        });
+        getActivity().getActionBar().setCustomView(normalView);
         return view;
     }
 
@@ -91,10 +153,26 @@ public class SectionsFragment extends Fragment implements OnSectionsGetListener 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        mSectionListView = (ExpandableListView) view.findViewById(R.id.section_list);
         mSectionListView.setFitsSystemWindows(true);
         mSectionListView.setClipToPadding(false);
         Utils.setInsets(getActivity(), mSectionListView);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        resetActionBar();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getActivity().getActionBar().setDisplayOptions(
+                ActionBar.DISPLAY_USE_LOGO | ActionBar.DISPLAY_SHOW_TITLE
+                        | ActionBar.DISPLAY_SHOW_HOME
+                        | ActionBar.DISPLAY_HOME_AS_UP
+        );
+        getActivity().getActionBar().setCustomView(normalView);
     }
 
     @Override
@@ -124,5 +202,28 @@ public class SectionsFragment extends Fragment implements OnSectionsGetListener 
                 return false;
             }
         });
+
+        mSearchAdapter = new ArrayAdapter<String>(mContext,
+                android.R.layout.simple_dropdown_item_1line, BBSApplication.boardNameList);
+        if (searchTextView != null) {
+            searchTextView.setAdapter(mSearchAdapter);
+        }
+    }
+
+    public void resetActionBar() {
+        getActivity().getActionBar().setDisplayOptions(
+                ActionBar.DISPLAY_USE_LOGO | ActionBar.DISPLAY_SHOW_CUSTOM
+                        | ActionBar.DISPLAY_SHOW_HOME
+                        | ActionBar.DISPLAY_HOME_AS_UP
+        );
+        searchTextView.setText("");
+        InputMethodManager imm = (InputMethodManager) mContext
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(searchTextView.getWindowToken(), 0);
+        getActivity().getActionBar().setCustomView(normalView);
+    }
+
+    public boolean isSearching() {
+        return getActivity().getActionBar().getCustomView() == searchView;
     }
 }

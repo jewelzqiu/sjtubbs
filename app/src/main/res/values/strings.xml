@@ -3,19 +3,16 @@
 
     <string name="app_name">饮水思源</string>
     <string name="frequent_used">常用</string>
+    <string name="sections">全部讨论区</string>
     <string name="action_pic">看图</string>
     <string name="action_uploaded">上载区</string>
+    <string name="search">搜索</string>
+    <string name="clear">清空</string>
+    <string name="search_hint">请输入板块名称</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="action_example">Example action</string>
     <string name="action_settings">Settings</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_page">PageActivity</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="title_activity_board">BoardActivity</string>
     <string name="title_activity_settings">设置</string>
-    <string name="title_activity_pic">PicActivity</string>
-    <string name="title_activity_post_page">PostPageActivity</string>
     <string name="title_activity_uploaded_pics">上载区</string>
     <string name="about">关于</string>
     <string name="creator">作者</string>
