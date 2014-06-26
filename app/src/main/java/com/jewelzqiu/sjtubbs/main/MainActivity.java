@@ -4,9 +4,6 @@ import com.jewelzqiu.sjtubbs.R;
 import com.jewelzqiu.sjtubbs.frequent.FrequentFragment;
 import com.jewelzqiu.sjtubbs.sections.SectionsFragment;
 import com.jewelzqiu.sjtubbs.settings.SettingsFragment;
-import com.jewelzqiu.sjtubbs.sections.GetSectionsTask;
-import com.jewelzqiu.sjtubbs.support.OnSectionsGetListener;
-import com.jewelzqiu.sjtubbs.support.Section;
 import com.jewelzqiu.sjtubbs.topten.TopTenFragment;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
@@ -19,11 +16,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.util.ArrayList;
-
 
 public class MainActivity extends Activity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, OnSectionsGetListener {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks/*, OnSectionsGetListener*/ {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -64,7 +59,7 @@ public class MainActivity extends Activity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
-        new GetSectionsTask(this).execute();
+        //new GetSectionsTask(this).execute();
 
         SystemBarTintManager tintManager = new SystemBarTintManager(this);
         tintManager.setStatusBarTintEnabled(true);
@@ -147,10 +142,10 @@ public class MainActivity extends Activity
         return super.onPrepareOptionsMenu(menu);
     }
 
-    @Override
-    public void onSectionsGet(ArrayList<Section> list) {
-        BBSApplication.sectionList = list;
-    }
+//    @Override
+//    public void onSectionsGet(ArrayList<Section> list) {
+//        BBSApplication.sectionList = list;
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

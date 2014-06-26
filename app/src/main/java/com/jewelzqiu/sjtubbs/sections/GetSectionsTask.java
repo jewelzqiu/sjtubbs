@@ -91,6 +91,6 @@ public class GetSectionsTask extends AsyncTask<Void, Void, Boolean> {
 
     @Override
     protected void onPostExecute(Boolean success) {
-        mListener.onSectionsGet(success ? sectionList : null);
+        mListener.onSectionsGet(success ? sectionList : null, true);
     }
 }

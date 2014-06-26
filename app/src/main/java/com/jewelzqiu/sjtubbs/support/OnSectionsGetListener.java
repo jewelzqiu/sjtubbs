@@ -7,6 +7,6 @@ import java.util.ArrayList;
  */
 public interface OnSectionsGetListener {
 
-    public void onSectionsGet(ArrayList<Section> list);
+    public void onSectionsGet(ArrayList<Section> list, boolean isUpdate);
 
 }

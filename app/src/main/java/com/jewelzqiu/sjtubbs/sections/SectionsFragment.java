@@ -3,6 +3,7 @@ package com.jewelzqiu.sjtubbs.sections;
 import com.jewelzqiu.sjtubbs.R;
 import com.jewelzqiu.sjtubbs.main.BBSApplication;
 import com.jewelzqiu.sjtubbs.support.Board;
+import com.jewelzqiu.sjtubbs.support.DatabaseHelper;
 import com.jewelzqiu.sjtubbs.support.OnSectionsGetListener;
 import com.jewelzqiu.sjtubbs.support.Section;
 import com.jewelzqiu.sjtubbs.support.Utils;
@@ -12,6 +13,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -86,14 +88,14 @@ public class SectionsFragment extends Fragment implements OnSectionsGetListener 
                 .setup(mPullToRefreshLayout);
         mSectionListView = (ExpandableListView) view.findViewById(R.id.section_list);
         mProgressBar = (ProgressBar) view.findViewById(R.id.progressbar);
-        if (savedInstanceState != null) {
-            mSections = savedInstanceState.getParcelableArrayList(SECTION_DATA);
-            onSectionsGet(BBSApplication.sectionList);
-        } else if (BBSApplication.sectionList != null) {
-            onSectionsGet(BBSApplication.sectionList);
-        } else {
-            new GetSectionsTask(this).execute();
-        }
+//        if (savedInstanceState != null) {
+//            mSections = savedInstanceState.getParcelableArrayList(SECTION_DATA);
+//            onSectionsGet(BBSApplication.sectionList, false);
+//        } else if (BBSApplication.sectionList != null) {
+//            onSectionsGet(BBSApplication.sectionList, false);
+//        } else {
+//            new GetSectionsTask(this).execute();
+//        }
 
         getActivity().getActionBar().setDisplayOptions(
                 ActionBar.DISPLAY_SHOW_CUSTOM |
@@ -141,6 +143,9 @@ public class SectionsFragment extends Fragment implements OnSectionsGetListener 
             }
         });
         getActivity().getActionBar().setCustomView(normalView);
+
+        new ReadDBTask().execute();
+
         return view;
     }
 
@@ -182,10 +187,25 @@ public class SectionsFragment extends Fragment implements OnSectionsGetListener 
     }
 
     @Override
-    public void onSectionsGet(ArrayList<Section> list) {
-        mPullToRefreshLayout.setRefreshComplete();
+    public void onSectionsGet(ArrayList<Section> list, boolean isUpdate) {
+        if (mPullToRefreshLayout != null) {
+            mPullToRefreshLayout.setRefreshComplete();
+        }
+
+        if (list.isEmpty()) {
+            if (mPullToRefreshLayout != null) {
+                mPullToRefreshLayout.setRefreshing(true);
+            }
+            new GetSectionsTask(this).execute();
+            return;
+        }
+
         mSections = list;
         BBSApplication.sectionList = list;
+        if (isUpdate) {
+            new UpdateDBTask().execute();
+        }
+
         mProgressBar.setVisibility(View.GONE);
         mSectionListView.setVisibility(View.VISIBLE);
         if (list == null) {
@@ -225,5 +245,29 @@ public class SectionsFragment extends Fragment implements OnSectionsGetListener 
 
     public boolean isSearching() {
         return getActivity().getActionBar().getCustomView() == searchView;
+    }
+
+    private class ReadDBTask extends AsyncTask<Void, Void, ArrayList<Section>> {
+
+        @Override
+        protected ArrayList<Section> doInBackground(Void... params) {
+            DatabaseHelper dbHelper = new DatabaseHelper(mContext);
+            return dbHelper.getSectionList();
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Section> sections) {
+            onSectionsGet(sections, false);
+        }
+    }
+
+    private class UpdateDBTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            DatabaseHelper dbHelper = new DatabaseHelper(mContext);
+            dbHelper.updateSections(mSections);
+            return null;
+        }
     }
 }
