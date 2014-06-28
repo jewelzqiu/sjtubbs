@@ -126,6 +126,8 @@ public class SectionsFragment extends Fragment implements OnSectionsGetListener 
                 intent.putExtra(BoardActivity.BOARD_NAME, board.name);
                 intent.putExtra(BoardActivity.BOARD_URL, board.url);
                 mContext.startActivity(intent);
+                DatabaseHelper dbHelper = new DatabaseHelper(mContext);
+                dbHelper.insert(board);
                 resetActionBar();
             }
         });
