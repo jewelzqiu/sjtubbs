@@ -47,7 +47,6 @@ public class PicActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        System.out.println("onResume");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             getWindow().getDecorView().setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE
