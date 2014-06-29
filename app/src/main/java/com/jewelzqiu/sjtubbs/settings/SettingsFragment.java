@@ -4,6 +4,7 @@ import com.jewelzqiu.sjtubbs.R;
 import com.jewelzqiu.sjtubbs.support.Utils;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -33,18 +34,35 @@ public class SettingsFragment extends PreferenceFragment {
             }
         });
 
-        preference = findPreference(getString(R.string.key_pic_path));
-        preference.setSummary(Utils.PIC_STORE_PATH);
+        preference = findPreference(getString(R.string.key_creator));
         preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                Uri uri = Uri.parse(Utils.PIC_STORE_PATH);
-                intent.setDataAndType(uri, "image/*");
-                startActivity(intent);
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("message/rfc822");
+                intent.putExtra(Intent.EXTRA_EMAIL, getString(R.string.creator_email));
+                try {
+//                    startActivity(Intent.createChooser(intent, getString(R.string.select_mail_app)));
+                    startActivity(intent);
+                } catch (ActivityNotFoundException e) {
+
+                }
                 return true;
             }
         });
+
+        preference = findPreference(getString(R.string.key_pic_path));
+        preference.setSummary(Utils.PIC_STORE_PATH);
+//        preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+//            @Override
+//            public boolean onPreferenceClick(Preference preference) {
+//                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//                Uri uri = Uri.parse(Utils.PIC_STORE_PATH);
+//                intent.setDataAndType(uri, "image/*");
+//                startActivity(intent);
+//                return true;
+//            }
+//        });
     }
 
     @Override

@@ -5,8 +5,9 @@
     <PreferenceCategory android:title="@string/about">
 
         <Preference
+            android:key="@string/key_creator"
             android:title="@string/creator"
-            android:summary="@string/creator_name" />
+            android:summary="@string/creator_email" />
 
         <Preference
             android:key="@string/key_github"

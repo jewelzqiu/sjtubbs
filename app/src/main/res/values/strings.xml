@@ -19,8 +19,11 @@
     <string name="title_activity_settings">设置</string>
     <string name="title_activity_uploaded_pics">上载区</string>
     <string name="about">关于</string>
-    <string name="creator">作者</string>
+    <string name="creator">开发者</string>
+    <string name="key_creator">key_creator</string>
     <string name="creator_name">\@Jewelzqiu</string>
+    <string name="creator_email">jewelz.q.915\@gmail.com</string>
+    <string name="select_mail_app">向开发者发送邮件</string>
     <string name="key_github">key_github</string>
     <string name="key_pic_path">pic_path</string>
     <string name="pic_path">图片保存路径</string>
