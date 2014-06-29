@@ -5,6 +5,10 @@
     <string name="frequent_used">常用</string>
     <string name="sections">全部讨论区</string>
     <string name="action_pic">看图</string>
+    <string name="share_pic">分享图片</string>
+    <string name="pic_saved">图片保存成功</string>
+    <string name="pic_not_saved">图片保存失败</string>
+    <string name="storage_failed">未找到外部存储</string>
     <string name="action_uploaded">上载区</string>
     <string name="search">搜索</string>
     <string name="clear">清空</string>
@@ -18,6 +22,8 @@
     <string name="creator">作者</string>
     <string name="creator_name">\@Jewelzqiu</string>
     <string name="key_github">key_github</string>
+    <string name="key_pic_path">pic_path</string>
+    <string name="pic_path">图片保存路径</string>
     <string name="github">Github</string>
 
 </resources>

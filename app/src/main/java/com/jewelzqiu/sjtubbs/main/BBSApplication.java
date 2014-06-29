@@ -4,14 +4,17 @@ import com.jewelzqiu.sjtubbs.R;
 import com.jewelzqiu.sjtubbs.support.Board;
 import com.jewelzqiu.sjtubbs.support.Post;
 import com.jewelzqiu.sjtubbs.support.Section;
+import com.jewelzqiu.sjtubbs.support.Utils;
 
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Point;
+import android.os.Environment;
 import android.view.Display;
 import android.view.WindowManager;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -45,6 +48,16 @@ public class BBSApplication extends Application {
     public void onCreate() {
         super.onCreate();
         getSize(getResources().getConfiguration().orientation);
+        Utils.PIC_STORE_PATH = Environment.getExternalStoragePublicDirectory("Pictures")
+                .getAbsolutePath() + "/sjtubbs";
+        File file = new File(Utils.PIC_STORE_PATH);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        File cacheDir = getExternalCacheDir();
+        if (cacheDir != null) {
+            Utils.PIC_CACHE_PATH = getExternalCacheDir().getAbsolutePath();
+        }
     }
 
     @Override

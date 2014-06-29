@@ -15,6 +15,10 @@ public class Utils {
 
     public static final String BBS_BASE_URL = "https://bbs.sjtu.edu.cn";
 
+    public static String PIC_STORE_PATH;
+
+    public static String PIC_CACHE_PATH;
+
     public static void setInsets(Activity activity, View view) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             return;

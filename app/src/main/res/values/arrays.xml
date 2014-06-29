@@ -7,5 +7,11 @@
         <item>全部讨论区</item>
         <item>设置</item>
     </string-array>
+
+    <string-array name="long_press_options">
+        <item>分享图片</item>
+        <item>保存图片</item>
+        <!--<item>用其他应用打开</item>-->
+    </string-array>
     
 </resources>

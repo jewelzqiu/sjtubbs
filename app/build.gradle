@@ -1,4 +1,4 @@
-apply plugin: 'android'
+apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 19
@@ -8,8 +8,8 @@ android {
         applicationId "com.jewelzqiu.sjtubbs"
         minSdkVersion 14
         targetSdkVersion 19
-        versionCode 10
-        versionName "0.3.7"
+        versionCode 11
+        versionName "0.3.8"
     }
 
     compileOptions {
@@ -26,7 +26,7 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:support-v4:19.+'
+    compile 'com.android.support:support-v4:20.+'
     compile 'org.jsoup:jsoup:1.7.3'
     compile 'com.github.chrisbanes.actionbarpulltorefresh:library:+'
     compile 'com.github.chrisbanes.photoview:library:1.2.3'

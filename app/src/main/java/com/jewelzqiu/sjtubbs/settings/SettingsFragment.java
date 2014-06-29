@@ -1,6 +1,7 @@
 package com.jewelzqiu.sjtubbs.settings;
 
 import com.jewelzqiu.sjtubbs.R;
+import com.jewelzqiu.sjtubbs.support.Utils;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import android.content.Intent;
@@ -27,6 +28,19 @@ public class SettingsFragment extends PreferenceFragment {
             public boolean onPreferenceClick(Preference preference) {
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(
                         (String) preference.getSummary()));
+                startActivity(intent);
+                return true;
+            }
+        });
+
+        preference = findPreference(getString(R.string.key_pic_path));
+        preference.setSummary(Utils.PIC_STORE_PATH);
+        preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                Uri uri = Uri.parse(Utils.PIC_STORE_PATH);
+                intent.setDataAndType(uri, "image/*");
                 startActivity(intent);
                 return true;
             }

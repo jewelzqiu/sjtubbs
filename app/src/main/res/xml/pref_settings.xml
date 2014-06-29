@@ -13,6 +13,10 @@
             android:title="@string/github"
             android:summary="https://github.com/Jewelzqiu/sjtubbs" />
 
+        <Preference
+            android:key="@string/key_pic_path"
+            android:title="@string/pic_path" />
+
     </PreferenceCategory>
 
 </PreferenceScreen>
