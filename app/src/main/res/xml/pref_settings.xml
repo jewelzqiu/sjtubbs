@@ -2,6 +2,15 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <PreferenceCategory android:title="@string/content">
+
+        <SwitchPreference
+            android:key="@string/key_mark_read"
+            android:title="@string/mark_read"
+            android:defaultValue="true" />
+
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="@string/about">
 
         <Preference
