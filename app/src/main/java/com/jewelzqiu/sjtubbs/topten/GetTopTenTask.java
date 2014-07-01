@@ -43,7 +43,8 @@ public class GetTopTenTask extends AsyncTask<String, Void, Boolean> {
                 String title = postLink.text();
                 String url = Utils.BBS_BASE_URL + postLink.attr("href");
                 String author = postLink.nextSibling().outerHtml();
-                mPosts.add(new Post(url, title, board, author));
+                String id = url.substring(url.lastIndexOf('=') + 1);
+                mPosts.add(new Post(url, title, board, author, null, id));
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -4,6 +4,7 @@ import com.jewelzqiu.sjtubbs.main.BBSApplication;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -16,7 +17,7 @@ import java.util.StringTokenizer;
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public static final int CURRENT_VERSION = 2;
+    public static final int CURRENT_VERSION = 3;
 
     private static final String DB_NAME = "db_bbs";
 
@@ -53,6 +54,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String COL_SUB_BOARD_LIST = "subboardlist";
 
+    // table visited posts
+    private static final String TB_VISITED_POSTS = "visited_posts";
+
+    private static final String COL_POST_BOARD = "board";
+
+    private static final String COL_POST_ID = "post_id";
+
     public DatabaseHelper(Context context) {
         super(context, DB_NAME, null, CURRENT_VERSION);
     }
@@ -82,6 +90,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + COL_SUB_BOARD_LIST + " VARCHAR"
                 + ")";
         db.execSQL(sql);
+
+        sql = "CREATE TABLE IF NOT EXISTS " + TB_VISITED_POSTS + "("
+                + "_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + COL_POST_BOARD + " VARCHAR, "
+                + COL_POST_ID + " VARCHAR)";
+        db.execSQL(sql);
     }
 
     @Override
@@ -102,7 +116,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         + COL_SUB_BOARD_LIST + " VARCHAR"
                         + ")";
                 db.execSQL(sql);
+
+                sql = "CREATE TABLE IF NOT EXISTS " + TB_VISITED_POSTS + "("
+                        + "_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                        + COL_POST_BOARD + " VARCHAR, "
+                        + COL_POST_ID + " VARCHAR)";
+                db.execSQL(sql);
                 break;
+
+            case 2:
+                sql = "CREATE TABLE IF NOT EXISTS " + TB_VISITED_POSTS + "("
+                        + "_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                        + COL_POST_BOARD + " VARCHAR, "
+                        + COL_POST_ID + " VARCHAR)";
+                db.execSQL(sql);
+                break;
+
         }
     }
 
@@ -262,6 +291,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             result.put(name, board);
         }
 
+        return result;
+    }
+
+    public void setPostViewed(Post post) {
+        SQLiteDatabase db = getWritableDatabase();
+        String sql = "INSERT INTO " + TB_VISITED_POSTS + " (" + COL_POST_BOARD + ", " + COL_POST_ID
+                + ") " + "VALUES(\"" + post.board + "\", \"" + post.id + "\")";
+        try {
+            db.execSQL(sql);
+        } catch (SQLException e) {
+
+        }
+        db.close();
+    }
+
+    public boolean isPostViewed(Post post) {
+        SQLiteDatabase db = getReadableDatabase();
+        String sql = "SELECT * FROM " + TB_VISITED_POSTS + " WHERE " + COL_POST_BOARD + "=\""
+                + post.board + "\" AND " + COL_POST_ID + "=\"" + post.id + "\"";
+        Cursor cursor = db.rawQuery(sql, null);
+        boolean result = cursor.getCount() > 0;
+        cursor.close();
         return result;
     }
 }

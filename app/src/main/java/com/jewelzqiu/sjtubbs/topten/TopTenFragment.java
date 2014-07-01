@@ -115,6 +115,14 @@ public class TopTenFragment extends Fragment implements OnPostsGetListener {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (mAdapter != null) {
+            mAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
     public void onPostsGet(ArrayList<Post> posts, String nextUrl) {
         mPullToRefreshLayout.setRefreshComplete();
         mProgressBar.setVisibility(View.GONE);

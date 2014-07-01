@@ -10,17 +10,23 @@ public class Post implements Parcelable {
 
     public String board;
 
+    public String desc;
+
     public String author;
 
     public String title;
 
     public String url;
 
-    public Post(String url, String title, String board, String author) {
+    public String id;
+
+    public Post(String url, String title, String board, String author, String desc, String id) {
         this.url = url;
         this.title = title;
         this.board = board;
         this.author = author;
+        this.desc = desc;
+        this.id = id;
     }
 
     public Post(Parcel parcel) {
@@ -32,7 +38,7 @@ public class Post implements Parcelable {
 
     @Override
     public String toString() {
-        return title + "\n" + board + ", " + author + "\n" + url;
+        return title + "\n" + board + ", " + author + "\n" + url + "\n" + desc + "\n" + id;
     }
 
     @Override
@@ -46,6 +52,8 @@ public class Post implements Parcelable {
         parcel.writeString(author);
         parcel.writeString(title);
         parcel.writeString(url);
+        parcel.writeString(desc);
+        parcel.writeString(id);
     }
 
     public static final Creator<Post> CREATOR = new Creator<Post>() {

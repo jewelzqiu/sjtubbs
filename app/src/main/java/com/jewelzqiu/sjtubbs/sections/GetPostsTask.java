@@ -53,7 +53,13 @@ public class GetPostsTask extends AsyncTask<String, Void, Void> {
             String title = element.text();
             String url = Utils.BBS_BASE_URL + "/" + element.attr("href").replace("bbstcon",
                     "bbswaptcon");
-            postList.add(new Post(url, title, desc, author));
+            String id;
+            if (url.endsWith("html")) {
+                id = url.substring(url.lastIndexOf(',') + 1, url.lastIndexOf('.'));
+            } else {
+                id = url.substring(url.lastIndexOf('=') + 1);
+            }
+            postList.add(new Post(url, title, Utils.CURRENT_BOARD, author, desc, id));
         }
     }
 

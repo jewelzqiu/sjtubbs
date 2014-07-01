@@ -61,6 +61,11 @@ public class BoardActivity extends Activity implements OnPostsGetListener,
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent intent = getIntent();
+        mBoardName = getIntent().getStringExtra(BOARD_NAME);
+        Utils.CURRENT_BOARD = mBoardName;
+
         setContentView(R.layout.fragment_post_list);
         mPullToRefreshLayout = (PullToRefreshLayout) findViewById(R.id.ptr_layout);
         ActionBarPullToRefresh.from(this)
@@ -84,9 +89,7 @@ public class BoardActivity extends Activity implements OnPostsGetListener,
         getActionBar().setDisplayShowHomeEnabled(true);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Intent intent = getIntent();
         setTitle(intent.getStringExtra(BOARD_TITLE));
-        mBoardName = getIntent().getStringExtra(BOARD_NAME);
 
         boardUrl = intent.getStringExtra(BOARD_URL);
         new GetPostsTask(this).execute(boardUrl);
@@ -96,6 +99,14 @@ public class BoardActivity extends Activity implements OnPostsGetListener,
         tintManager.setNavigationBarTintEnabled(true);
         tintManager.setTintColor(getResources().getColor(android.R.color.holo_blue_dark));
         tintManager.setTintAlpha(0.69f);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mAdapter != null) {
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -133,10 +144,14 @@ public class BoardActivity extends Activity implements OnPostsGetListener,
             return;
         }
 
+        if (posts.isEmpty()) {
+            return;
+        }
+
         if (lastPostId >= 0) {
             for (Iterator<Post> iterator = posts.iterator(); iterator.hasNext(); ) {
                 try {
-                    int temp = Integer.parseInt(iterator.next().board);
+                    int temp = Integer.parseInt(iterator.next().desc);
                     if (temp >= lastPostId) {
                         iterator.remove();
                     }
@@ -145,7 +160,7 @@ public class BoardActivity extends Activity implements OnPostsGetListener,
                 }
             }
         }
-        lastPostId = Integer.parseInt(posts.get(posts.size() - 1).board);
+        lastPostId = Integer.parseInt(posts.get(posts.size() - 1).desc);
 
         if (mAdapter == null || isRefresh) {
             isRefresh = false;

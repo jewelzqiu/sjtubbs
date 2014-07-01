@@ -18,13 +18,19 @@ import java.util.ArrayList;
  */
 public class PostListAdapter extends BaseAdapter {
 
+    private Context mContext;
+
     private LayoutInflater mInflater;
 
     private ArrayList<Post> mPosts;
 
+    private DatabaseHelper mDatabaseHelper;
+
     public PostListAdapter(ArrayList<Post> posts, Context context) {
+        mContext = context;
         mPosts = posts;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mDatabaseHelper = new DatabaseHelper(context);
     }
 
     @Override
@@ -55,15 +61,30 @@ public class PostListAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) view.getTag();
         }
-        holder.titleView.setText(mPosts.get(i).title);
-        holder.boardView.setText(mPosts.get(i).board);
-        holder.authorView.setText(mPosts.get(i).author);
+
+        Post post = mPosts.get(i);
+        holder.titleView.setText(post.title);
+        holder.authorView.setText(post.author);
+        if (post.desc != null) {
+            holder.boardView.setText(post.desc);
+        } else {
+            holder.boardView.setText(post.board);
+        }
+
+        if (mDatabaseHelper.isPostViewed(post)) {
+            holder.titleView
+                    .setTextColor(mContext.getResources().getColor(android.R.color.darker_gray));
+        }
+
         return view;
     }
 
     private class ViewHolder {
+
         TextView titleView;
+
         TextView boardView;
+
         TextView authorView;
     }
 
@@ -71,6 +92,8 @@ public class PostListAdapter extends BaseAdapter {
         Intent intent = new Intent(context, PostPageActivity.class);
         intent.putExtra(PostPageActivity.POST_URL, mPosts.get(position).url);
         intent.putExtra(PostPageActivity.PAGE_TITLE, mPosts.get(position).title);
+        DatabaseHelper dbHelper = new DatabaseHelper(mContext);
+        dbHelper.setPostViewed(mPosts.get(position));
         context.startActivity(intent);
     }
 

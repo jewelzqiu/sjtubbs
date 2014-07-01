@@ -19,6 +19,8 @@ public class Utils {
 
     public static String PIC_CACHE_PATH;
 
+    public static String CURRENT_BOARD;
+
     public static void setInsets(Activity activity, View view) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             return;
