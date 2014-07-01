@@ -71,9 +71,9 @@ public class PostPageAdapter extends BaseAdapter {
     }
 
     public void onItemClick(Context context, int position) {
-        Intent intent = new Intent(context, PageActivity.class);
-        intent.putExtra(PageActivity.PAGE_TITLE, ((Activity) context).getTitle());
-        intent.putExtra(PageActivity.POST_CONTENT, mPostList.get(position));
+        Intent intent = new Intent(context, SinglePostDetailActivity.class);
+        intent.putExtra(SinglePostDetailActivity.PAGE_TITLE, ((Activity) context).getTitle());
+        intent.putExtra(SinglePostDetailActivity.POST_CONTENT, mPostList.get(position));
         mContext.startActivity(intent);
     }
 

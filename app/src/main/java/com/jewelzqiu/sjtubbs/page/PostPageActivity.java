@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -122,7 +123,7 @@ public class PostPageActivity extends Activity implements AbsListView.OnScrollLi
                 Toast.makeText(this, "此贴没有图片！", Toast.LENGTH_SHORT).show();
                 return true;
             }
-            startActivity(new Intent(this, PicActivity.class));
+            startActivity(new Intent(this, PicViewPagerActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -155,12 +156,12 @@ public class PostPageActivity extends Activity implements AbsListView.OnScrollLi
                 mFooterView.setVisibility(View.INVISIBLE);
                 break;
         }
-//        mPostListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                mAdapter.onItemClick(PostPageActivity.this, position);
-//            }
-//        });
+        mPostListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mAdapter.onItemClick(PostPageActivity.this, position);
+            }
+        });
 
     }
 

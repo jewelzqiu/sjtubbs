@@ -3,7 +3,7 @@ package com.jewelzqiu.sjtubbs.sections;
 import com.etsy.android.grid.util.DynamicHeightImageView;
 import com.jewelzqiu.sjtubbs.R;
 import com.jewelzqiu.sjtubbs.main.BBSApplication;
-import com.jewelzqiu.sjtubbs.page.PicActivity;
+import com.jewelzqiu.sjtubbs.page.PicViewPagerActivity;
 import com.koushikdutta.ion.Ion;
 
 import android.content.Context;
@@ -94,8 +94,8 @@ public class UploadedPicsAdapter extends BaseAdapter {
     }
 
     public void onItemClick(int position) {
-        Intent intent = new Intent(mContext, PicActivity.class);
-        intent.putExtra(PicActivity.PHOTO_POSITION, position);
+        Intent intent = new Intent(mContext, PicViewPagerActivity.class);
+        intent.putExtra(PicViewPagerActivity.PHOTO_POSITION, position);
         mContext.startActivity(intent);
     }
 

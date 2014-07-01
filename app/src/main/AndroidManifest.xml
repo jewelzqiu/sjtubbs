@@ -24,10 +24,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".page.PageActivity" />
+        <activity android:name=".page.SinglePostDetailActivity" />
         <activity android:name=".sections.BoardActivity" />
         <activity
-            android:name=".page.PicActivity"
+            android:name=".page.PicViewPagerActivity"
+            android:theme="@style/PicBrowserTheme" />
+        <activity
+            android:name=".page.SinglePicActivity"
             android:theme="@style/PicBrowserTheme" />
         <activity android:name=".page.PostPageActivity" />
         <activity

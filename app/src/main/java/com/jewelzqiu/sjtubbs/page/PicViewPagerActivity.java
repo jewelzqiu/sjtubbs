@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
-public class PicActivity extends Activity {
+public class PicViewPagerActivity extends Activity {
 
     public static final String PHOTO_POSITION = "photo_pos";
 
