@@ -48,6 +48,9 @@ public class Utils {
     }
 
     public static void setSexColor(TextView view, String userId) {
+        if (userId == null || userId.equals("")) {
+            return;
+        }
         new SetSexTask(view).execute(userId);
     }
 

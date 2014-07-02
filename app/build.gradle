@@ -8,8 +8,8 @@ android {
         applicationId "com.jewelzqiu.sjtubbs"
         minSdkVersion 14
         targetSdkVersion 19
-        versionCode 15
-        versionName "0.4.1"
+        versionCode 16
+        versionName "0.4.2"
     }
 
     compileOptions {
