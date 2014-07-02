@@ -2,4 +2,6 @@
 <resources>
     <color name="sjtublue">#004da5</color>
     <color name="dimgrey">#696969</color>
+    <color name="male">#33a0a0</color>
+    <color name="female">#d000d0</color>
 </resources>

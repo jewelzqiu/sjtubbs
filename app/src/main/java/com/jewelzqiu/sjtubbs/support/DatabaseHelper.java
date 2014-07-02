@@ -1,13 +1,21 @@
 package com.jewelzqiu.sjtubbs.support;
 
+import com.jewelzqiu.sjtubbs.R;
 import com.jewelzqiu.sjtubbs.main.BBSApplication;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.AsyncTask;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.StringTokenizer;
@@ -17,7 +25,7 @@ import java.util.StringTokenizer;
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public static final int CURRENT_VERSION = 3;
+    public static final int CURRENT_VERSION = 4;
 
     private static final String DB_NAME = "db_bbs";
 
@@ -61,6 +69,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String COL_POST_ID = "post_id";
 
+    // table user sex
+    private static final String TB_USER_SEX = "user_sex";
+
+    private static final String COL_USER_ID = "_id";
+
+    private static final String COL_USER_SEX = "sex";
+
     public DatabaseHelper(Context context) {
         super(context, DB_NAME, null, CURRENT_VERSION);
     }
@@ -96,13 +111,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + COL_POST_BOARD + " VARCHAR, "
                 + COL_POST_ID + " VARCHAR)";
         db.execSQL(sql);
+
+        sql = "CREATE TABLE IF NOT EXISTS " + TB_USER_SEX + "("
+                + COL_USER_ID + " VARCHAR PRIMARY KEY, "
+                + COL_USER_SEX + " INTEGER)";
+        db.execSQL(sql);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        String sql;
         switch (oldVersion) {
             case 1:
-                String sql = "CREATE TABLE IF NOT EXISTS " + TB_SECTIONS + "("
+                sql = "CREATE TABLE IF NOT EXISTS " + TB_SECTIONS + "("
                         + COL_SECTION_NAME + " VARCHAR PRIMARY KEY, "
                         + COL_SECTION_URL + " VARCHAR, "
                         + COL_SECTION_BOARD_LIST + " VARCHAR"
@@ -117,21 +138,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         + ")";
                 db.execSQL(sql);
 
-                sql = "CREATE TABLE IF NOT EXISTS " + TB_VISITED_POSTS + "("
-                        + "_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                        + COL_POST_BOARD + " VARCHAR, "
-                        + COL_POST_ID + " VARCHAR)";
-                db.execSQL(sql);
-                break;
-
             case 2:
                 sql = "CREATE TABLE IF NOT EXISTS " + TB_VISITED_POSTS + "("
                         + "_id INTEGER PRIMARY KEY AUTOINCREMENT, "
                         + COL_POST_BOARD + " VARCHAR, "
                         + COL_POST_ID + " VARCHAR)";
                 db.execSQL(sql);
-                break;
 
+            default:
+                sql = "CREATE TABLE IF NOT EXISTS " + TB_USER_SEX + "("
+                        + COL_USER_ID + " VARCHAR PRIMARY KEY, "
+                        + COL_USER_SEX + " INTEGER)";
+                db.execSQL(sql);
+                break;
         }
     }
 
@@ -314,5 +333,61 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         boolean result = cursor.getCount() > 0;
         cursor.close();
         return result;
+    }
+
+    public int getUserSexColor(String userId) throws IOException {
+        SQLiteDatabase db = getWritableDatabase();
+        String sql = "SELECT " + COL_USER_SEX + " FROM " + TB_USER_SEX + " WHERE " + COL_USER_ID
+                + "=\"" + userId + "\"";
+        Cursor cursor = db.rawQuery(sql, null);
+        int sex;
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            sex = cursor.getInt(cursor.getColumnIndex(COL_USER_SEX));
+            cursor.close();
+            return sex == 1 ? R.color.male : R.color.female;
+        }
+
+        Document doc = Jsoup.connect(Utils.BBS_BASE_URL + "/bbsqry?userid=" + userId).get();
+        Elements elements = doc.select("pre.tight font");
+        String fontClass = elements.get(6).className();
+        int color = R.color.male;
+        sex = 1;
+        if (fontClass.equals("c35")) {
+            color = R.color.female;
+            sex = 0;
+        }
+
+        new SaveUserSexTask(db, userId, sex).execute();
+
+        return color;
+    }
+
+    private class SaveUserSexTask extends AsyncTask<Void, Void, Void> {
+
+        private SQLiteDatabase db;
+
+        private String userId;
+
+        private int sex;
+
+        public SaveUserSexTask(SQLiteDatabase db, String userId, int sex) {
+            this.db = db;
+            this.userId = userId;
+            this.sex = sex;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            String sql = "INSERT INTO " + TB_USER_SEX + " VALUES(\"" + userId + "\", " + sex
+                    + ")";
+            try {
+                db.execSQL(sql);
+            } catch (SQLiteConstraintException e) {
+                e.printStackTrace();
+            }
+            db.close();
+            return null;
+        }
     }
 }

@@ -2,12 +2,13 @@ package com.jewelzqiu.sjtubbs.page;
 
 import com.jewelzqiu.sjtubbs.R;
 import com.jewelzqiu.sjtubbs.main.BBSApplication;
+import com.jewelzqiu.sjtubbs.support.Reply;
 import com.jewelzqiu.sjtubbs.support.UrlDrawable;
+import com.jewelzqiu.sjtubbs.support.Utils;
 import com.koushikdutta.async.future.Future;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -30,26 +31,26 @@ public class PostPageAdapter extends BaseAdapter {
 
     private Context mContext;
 
-    private ArrayList<String> mPostList;
+    private ArrayList<Reply> mReplyList;
 
-    public PostPageAdapter(Context context, ArrayList<String> postList) {
+    public PostPageAdapter(Context context, ArrayList<Reply> replyList) {
         mContext = context;
-        mPostList = postList;
+        mReplyList = replyList;
     }
 
-    public void appendPosts(ArrayList<String> postList) {
-        mPostList.addAll(postList);
+    public void appendPosts(ArrayList<Reply> replyList) {
+        mReplyList.addAll(replyList);
         notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
-        return mPostList.size();
+        return mReplyList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return mPostList.get(position);
+        return mReplyList.get(position);
     }
 
     @Override
@@ -59,22 +60,56 @@ public class PostPageAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder holder;
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) parent.getContext()
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.post_detail_list_item, null);
+
+            holder = new ViewHolder();
+            holder.userIdView = (TextView) convertView.findViewById(R.id.text_id);
+            holder.timeView = (TextView) convertView.findViewById(R.id.text_time);
+            holder.titleView = (TextView) convertView.findViewById(R.id.text_title);
+            holder.contentView = (TextView) convertView.findViewById(R.id.text_content);
+
+            convertView.setTag(holder);
+
+        } else {
+            holder = (ViewHolder) convertView.getTag();
         }
-        TextView textView = (TextView) convertView;
-        String url = mPostList.get(position);
-        textView.setText(Html.fromHtml(url, new MyImageGetter(mContext, textView), null));
+
+        Reply reply = mReplyList.get(position);
+        holder.userIdView.setText(reply.userId);
+        holder.timeView.setText(reply.time);
+        holder.titleView.setText(reply.title);
+        holder.contentView.setText(
+                Html.fromHtml(reply.content, new MyImageGetter(mContext, holder.contentView),
+                        null));
+
+        Utils.setSexColor(holder.userIdView, reply.userId);
+
         return convertView;
     }
 
     public void onItemClick(Context context, int position) {
-        Intent intent = new Intent(context, SinglePostDetailActivity.class);
-        intent.putExtra(SinglePostDetailActivity.PAGE_TITLE, ((Activity) context).getTitle());
-        intent.putExtra(SinglePostDetailActivity.POST_CONTENT, mPostList.get(position));
+        Intent intent = new Intent(context, ReplyDetailActivity.class);
+        Reply reply = mReplyList.get(position);
+        intent.putExtra(ReplyDetailActivity.REPLY_USER, reply.userId);
+        intent.putExtra(ReplyDetailActivity.REPLY_TIME, reply.time);
+        intent.putExtra(ReplyDetailActivity.REPLY_TITLE, reply.title);
+        intent.putExtra(ReplyDetailActivity.REPLY_CONTENT, reply.content);
         mContext.startActivity(intent);
+    }
+
+    private class ViewHolder {
+
+        public TextView userIdView;
+
+        public TextView timeView;
+
+        public TextView titleView;
+
+        public TextView contentView;
     }
 
     private class MyImageGetter implements Html.ImageGetter {

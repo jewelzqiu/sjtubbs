@@ -6,9 +6,13 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.view.View;
+import android.widget.TextView;
+
+import java.io.IOException;
 
 /**
  * Created by jewelzqiu on 6/7/14.
@@ -41,6 +45,35 @@ public class Utils {
             return true;
         }
         return preferences.getBoolean(context.getString(R.string.key_mark_read), true);
+    }
+
+    public static void setSexColor(TextView view, String userId) {
+        new SetSexTask(view).execute(userId);
+    }
+
+    private static class SetSexTask extends AsyncTask<String, Void, Integer> {
+
+        TextView view;
+
+        public SetSexTask(TextView textView) {
+            view = textView;
+        }
+
+        @Override
+        protected Integer doInBackground(String... params) {
+            DatabaseHelper dbHelper = new DatabaseHelper(view.getContext());
+            try {
+                return dbHelper.getUserSexColor(params[0]);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return android.R.color.black;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Integer color) {
+            view.setTextColor(view.getResources().getColor(color));
+        }
     }
 
 }

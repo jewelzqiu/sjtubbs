@@ -2,6 +2,7 @@ package com.jewelzqiu.sjtubbs.page;
 
 import com.jewelzqiu.sjtubbs.R;
 import com.jewelzqiu.sjtubbs.main.BBSApplication;
+import com.jewelzqiu.sjtubbs.support.Reply;
 import com.jewelzqiu.sjtubbs.support.Utils;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
@@ -18,7 +19,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -129,7 +129,7 @@ public class PostPageActivity extends Activity implements AbsListView.OnScrollLi
         return super.onOptionsItemSelected(item);
     }
 
-    private void onPostListGet(ArrayList<String> postList, int result, boolean clear) {
+    private void onPostListGet(ArrayList<Reply> replyList, int result, boolean clear) {
         mPullToRefreshLayout.setRefreshComplete();
         mProgressBar.setVisibility(View.GONE);
         mPostListView.setVisibility(View.VISIBLE);
@@ -140,12 +140,12 @@ public class PostPageActivity extends Activity implements AbsListView.OnScrollLi
 
             case FLAG_OK:
                 if (clear || mAdapter == null) {
-                    mAdapter = new PostPageAdapter(this, postList);
+                    mAdapter = new PostPageAdapter(this, replyList);
                     mPostListView.setAdapter(mAdapter);
                 } else {
-                    mAdapter.appendPosts(postList);
+                    mAdapter.appendPosts(replyList);
                 }
-                if (nextPageUrl == null || postList.isEmpty()) {
+                if (nextPageUrl == null || replyList.isEmpty()) {
                     mFooterView.setVisibility(View.INVISIBLE);
                 } else {
                     mFooterView.setVisibility(View.VISIBLE);
@@ -156,12 +156,12 @@ public class PostPageActivity extends Activity implements AbsListView.OnScrollLi
                 mFooterView.setVisibility(View.INVISIBLE);
                 break;
         }
-        mPostListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mAdapter.onItemClick(PostPageActivity.this, position);
-            }
-        });
+//        mPostListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                mAdapter.onItemClick(PostPageActivity.this, position);
+//            }
+//        });
 
     }
 
@@ -183,7 +183,7 @@ public class PostPageActivity extends Activity implements AbsListView.OnScrollLi
 
         private String url;
 
-        private ArrayList<String> postList = new ArrayList<String>();
+        private ArrayList<Reply> replyList = new ArrayList<Reply>();
 
         private boolean clear;
 
@@ -218,14 +218,31 @@ public class PostPageActivity extends Activity implements AbsListView.OnScrollLi
 
                 Elements posts = doc.getElementsByTag("pre");
                 for (Element post : posts) {
-                    String postContent = post.html().replace("\n", "<br />");
+//                    String postContent = post.html();
+                    StringBuilder builder = new StringBuilder(post.html());
+                    Reply reply;
+                    String id = "", time = "", title = "", content;
                     if (special) {
-                        postList.add(postContent);
+                        content = builder.toString().replace("\n", "<br />");
+                        reply = new Reply(id, time, title, content);
+                        replyList.add(reply);
                         continue;
                     }
                     try {
-                        postContent = postContent.substring(postContent.indexOf(']') + 2);
-                        postList.add(postContent);
+                        builder = new StringBuilder(builder.substring(builder.indexOf("]") + 2));
+                        int index = builder.indexOf("\n");
+                        String line = builder.substring(0, index);
+                        builder = new StringBuilder(builder.substring(index + 1));
+
+                        index = line.indexOf(' ');
+                        id = line.substring(0, index);
+                        time = line.substring(index + 1);
+
+                        index = builder.indexOf("\n");
+                        title = builder.substring(0, index);
+                        content = builder.substring(index + 1).replace("\n", "<br />");
+
+                        replyList.add(new Reply(id, time, title, content));
                     } catch (IndexOutOfBoundsException e) {
                         e.printStackTrace();
                     }
@@ -249,7 +266,7 @@ public class PostPageActivity extends Activity implements AbsListView.OnScrollLi
         @Override
         protected void onPostExecute(Integer result) {
             invalidateOptionsMenu();
-            onPostListGet(postList, result, clear);
+            onPostListGet(replyList, result, clear);
         }
     }
 }

@@ -27,11 +27,15 @@ import android.widget.Toast;
 
 import java.util.HashSet;
 
-public class SinglePostDetailActivity extends Activity {
+public class ReplyDetailActivity extends Activity {
 
-    public static final String POST_CONTENT = "post_url";
+    public static final String REPLY_USER = "reply_user";
 
-    public static final String PAGE_TITLE = "page_title";
+    public static final String REPLY_TIME = "reply_time";
+
+    public static final String REPLY_CONTENT = "reply_url";
+
+    public static final String REPLY_TITLE = "reply_title";
 
     private static final String IMG_AUTO_ZOOM = "javascript:"
             + "var elements = document.getElementsByTag('img').onload = "
@@ -61,9 +65,9 @@ public class SinglePostDetailActivity extends Activity {
 
         BBSApplication.imgUrlMap.clear();
         BBSApplication.imgUrlList.clear();
-        new PrepareContentTask(mWebView).execute(getIntent().getStringExtra(POST_CONTENT));
+        new PrepareContentTask(mWebView).execute(getIntent().getStringExtra(REPLY_CONTENT));
 
-        setTitle(getIntent().getStringExtra(PAGE_TITLE));
+        setTitle(getIntent().getStringExtra(REPLY_TITLE));
 
         SystemBarTintManager tintManager = new SystemBarTintManager(this);
         tintManager.setStatusBarTintEnabled(true);
@@ -131,14 +135,14 @@ public class SinglePostDetailActivity extends Activity {
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             System.out.println("clicked url: " + url);
             if (BBSApplication.imgUrlMap.containsKey(url)) {
-                Intent intent = new Intent(SinglePostDetailActivity.this,
+                Intent intent = new Intent(ReplyDetailActivity.this,
                         PicViewPagerActivity.class);
                 intent.putExtra(PicViewPagerActivity.PHOTO_POSITION,
                         BBSApplication.imgUrlMap.get(url));
                 startActivity(intent);
             } else if (imgFormatSet
                     .contains(url.substring(url.lastIndexOf('.') + 1).toLowerCase())) {
-                Intent intent = new Intent(SinglePostDetailActivity.this, SinglePicActivity.class);
+                Intent intent = new Intent(ReplyDetailActivity.this, SinglePicActivity.class);
                 intent.putExtra(SinglePicActivity.PIC_URL, url);
                 startActivity(intent);
             } else {

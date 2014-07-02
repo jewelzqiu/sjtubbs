@@ -24,7 +24,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".page.SinglePostDetailActivity" />
+        <activity android:name=".page.ReplyDetailActivity" />
         <activity android:name=".sections.BoardActivity" />
         <activity
             android:name=".page.PicViewPagerActivity"
