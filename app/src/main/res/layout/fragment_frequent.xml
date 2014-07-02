@@ -8,12 +8,11 @@
         android:id="@+id/frequent_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
+        android:layout_margin="8dp"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="5dp"
         android:fitsSystemWindows="true"
         android:clipToPadding="false"
-        android:scrollbarStyle="outsideOverlay"/>
+        android:scrollbars="none"/>
 
 </FrameLayout>

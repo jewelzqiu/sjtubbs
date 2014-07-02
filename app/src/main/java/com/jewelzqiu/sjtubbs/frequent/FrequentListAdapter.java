@@ -27,12 +27,12 @@ public class FrequentListAdapter extends CursorAdapter {
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        return inflater.inflate(R.layout.frequent_list_item, null);
+        return inflater.inflate(R.layout.frequent_list_item, parent, false);
     }
 
     @Override
     public void bindView(View view, final Context context, Cursor cursor) {
-        TextView textView = (TextView) view;
+        TextView textView = (TextView) view.findViewById(R.id.text_board);
         final String title = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_TITLE));
         final String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_NAME));
         final String url = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_URL));

@@ -49,10 +49,10 @@ public class PostListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
+    public View getView(int i, View view, ViewGroup parent) {
         ViewHolder holder;
         if (view == null) {
-            view = mInflater.inflate(R.layout.post_list_item, null);
+            view = mInflater.inflate(R.layout.post_list_item, parent, false);
             holder = new ViewHolder();
             holder.titleView = (TextView) view.findViewById(R.id.title);
             holder.boardView = (TextView) view.findViewById(R.id.board);

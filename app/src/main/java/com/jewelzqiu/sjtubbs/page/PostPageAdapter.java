@@ -64,7 +64,7 @@ public class PostPageAdapter extends BaseAdapter {
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) parent.getContext()
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.post_detail_list_item, null);
+            convertView = inflater.inflate(R.layout.post_detail_list_item, parent, false);
 
             holder = new ViewHolder();
             holder.userIdView = (TextView) convertView.findViewById(R.id.text_id);
