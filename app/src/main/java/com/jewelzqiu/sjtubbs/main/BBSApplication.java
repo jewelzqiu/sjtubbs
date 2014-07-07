@@ -58,6 +58,10 @@ public class BBSApplication extends Application {
         if (cacheDir != null) {
             Utils.PIC_CACHE_PATH = getExternalCacheDir().getAbsolutePath();
         }
+
+        if (Utils.isAutoLoginEnabled(this)) {
+            Utils.autoLogin(this);
+        }
     }
 
     @Override

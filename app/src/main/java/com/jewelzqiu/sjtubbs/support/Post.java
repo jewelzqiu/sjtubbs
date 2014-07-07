@@ -34,6 +34,8 @@ public class Post implements Parcelable {
         author = parcel.readString();
         title = parcel.readString();
         url = parcel.readString();
+        desc = parcel.readString();
+        id = parcel.readString();
     }
 
     @Override

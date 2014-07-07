@@ -171,7 +171,6 @@ public class ReplyDetailActivity extends Activity {
             html = params[0];
             boolean success = true;
 
-            System.out.println(html);
             Document doc = Jsoup.parse(html);
 
             Elements links = doc.select("a");

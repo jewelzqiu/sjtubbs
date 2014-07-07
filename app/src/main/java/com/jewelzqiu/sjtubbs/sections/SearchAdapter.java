@@ -55,7 +55,6 @@ public class SearchAdapter extends ArrayAdapter<String> implements Filterable {
 
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            System.out.println(constraint);
             FilterResults results = new FilterResults();
             ArrayList<String> list = new ArrayList<String>();
             if (TextUtils.isEmpty(constraint)) {

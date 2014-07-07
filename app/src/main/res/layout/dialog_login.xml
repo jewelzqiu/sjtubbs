@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/title_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:layout_marginRight="15dp"
+        android:text="@string/username"
+        android:textAppearance="?android:textAppearanceMedium"/>
+
+    <EditText
+        android:id="@+id/text_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/title_username"
+        android:layout_alignBaseline="@id/title_username"
+        android:inputType="text"
+        android:textAppearance="?android:textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/title_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:layout_alignLeft="@id/title_username"
+        android:layout_below="@id/text_username"
+        android:text="@string/password"
+        android:textAppearance="?android:textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/text_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/text_username"
+        android:layout_below="@id/text_username"
+        android:layout_toRightOf="@id/title_password"
+        android:layout_alignBaseline="@id/title_password"
+        android:inputType="textPassword"
+        android:textAppearance="?android:textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/title_autologin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:layout_below="@id/text_password"
+        android:text="@string/remember"
+        android:textAppearance="?android:textAppearanceMedium"/>
+
+    <Switch
+        android:id="@+id/switch_remember"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/title_autologin"
+        android:layout_alignParentRight="true"/>
+
+</RelativeLayout>

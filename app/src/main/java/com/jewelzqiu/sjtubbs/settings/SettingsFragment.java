@@ -17,7 +17,11 @@ import android.widget.ListView;
 /**
  * Created by jewelzqiu on 6/8/14.
  */
-public class SettingsFragment extends PreferenceFragment {
+public class SettingsFragment extends PreferenceFragment implements Utils.OnLoginLogoutListener {
+
+    private Preference accountPref;
+
+    private Preference loginPref;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,6 +67,33 @@ public class SettingsFragment extends PreferenceFragment {
 //                return true;
 //            }
 //        });
+
+        accountPref = findPreference(getString(R.string.key_account));
+        accountPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                if (Utils.USER_ID == null) {
+                    return true;
+                }
+
+                return true;
+            }
+        });
+        loginPref = findPreference(getString(R.string.key_login));
+        loginPref.setTitle(Utils.USER_ID == null ? R.string.login : R.string.logout);
+        loginPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                if (Utils.USER_ID != null) {
+                    Utils.logout(SettingsFragment.this);
+                } else {
+                    Utils.login(getActivity(), SettingsFragment.this);
+                }
+                return true;
+            }
+        });
+
+        onLoginLogout();
     }
 
     @Override
@@ -79,6 +110,19 @@ public class SettingsFragment extends PreferenceFragment {
                     config.getPixelInsetTop(true),
                     (int) getResources().getDimension(R.dimen.activity_horizontal_margin),
                     config.getPixelInsetBottom());
+        }
+    }
+
+    @Override
+    public void onLoginLogout() {
+        if (Utils.USER_ID == null) {
+            accountPref.setTitle(getString(R.string.not_logged_in));
+            accountPref.setEnabled(false);
+            loginPref.setTitle(getString(R.string.login));
+        } else {
+            accountPref.setTitle(Utils.USER_ID);
+            accountPref.setEnabled(true);
+            loginPref.setTitle(getString(R.string.logout));
         }
     }
 }

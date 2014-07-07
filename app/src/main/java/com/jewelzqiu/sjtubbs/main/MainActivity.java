@@ -4,6 +4,7 @@ import com.jewelzqiu.sjtubbs.R;
 import com.jewelzqiu.sjtubbs.frequent.FrequentFragment;
 import com.jewelzqiu.sjtubbs.sections.SectionsFragment;
 import com.jewelzqiu.sjtubbs.settings.SettingsFragment;
+import com.jewelzqiu.sjtubbs.support.MyExceptionHandler;
 import com.jewelzqiu.sjtubbs.topten.TopTenFragment;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
@@ -66,6 +67,8 @@ public class MainActivity extends Activity
         tintManager.setNavigationBarTintEnabled(true);
         tintManager.setTintColor(getResources().getColor(android.R.color.holo_blue_dark));
         tintManager.setTintAlpha(0.69f);
+
+        Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));
     }
 
     @Override
