@@ -1,4 +1,4 @@
-package com.jewelzqiu.sjtubbs.page;
+package com.jewelzqiu.sjtubbs.postpage;
 
 import com.jewelzqiu.sjtubbs.R;
 import com.jewelzqiu.sjtubbs.main.BBSApplication;
@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -35,6 +36,8 @@ public class PostPageActivity extends Activity implements AbsListView.OnScrollLi
     public static final String POST_URL = "post_url";
 
     public static final String PAGE_TITLE = "page_title";
+
+    public static final String BOARD_NAME = "board";
 
     private static final String IMG_AUTO_ZOOM = "javascript:"
             + "var elements = document.getElementsByTag('img').onload = "
@@ -62,6 +65,10 @@ public class PostPageActivity extends Activity implements AbsListView.OnScrollLi
 
     private String originalUrl, nextPageUrl;
 
+    private String boardName;
+
+    private ArrayList<String> mReplyUrlList = new ArrayList<>();
+
     private int visibleLastIndex;
 
     @Override
@@ -82,6 +89,7 @@ public class PostPageActivity extends Activity implements AbsListView.OnScrollLi
         mProgressBar = (ProgressBar) findViewById(R.id.progressbar);
         mPostListView = (ListView) findViewById(R.id.post_list);
         mPostListView.setOnScrollListener(this);
+        mPostListView.setOnItemClickListener(new OnPostClickListener());
         mFooterView = (ProgressBar) getLayoutInflater()
                 .inflate(R.layout.progressbar_loading, null);
         mPostListView.addFooterView(mFooterView);
@@ -91,6 +99,7 @@ public class PostPageActivity extends Activity implements AbsListView.OnScrollLi
         setTitle(getIntent().getStringExtra(PAGE_TITLE));
 
         originalUrl = getIntent().getStringExtra(POST_URL);
+        boardName = getIntent().getStringExtra(BOARD_NAME);
 
         BBSApplication.imgUrlMap.clear();
         BBSApplication.imgUrlList.clear();
@@ -224,11 +233,16 @@ public class PostPageActivity extends Activity implements AbsListView.OnScrollLi
                     String id = "", time = "", title = "", content;
                     if (special) {
                         content = builder.toString().replace("\n", "<br />");
-                        reply = new Reply(id, time, title, content);
+                        reply = new Reply(id, time, title, content, null);
                         replyList.add(reply);
                         continue;
                     }
                     try {
+                        String replyUrl = post.getElementsByTag("a").first().attr("href");
+                        if (!replyUrl.startsWith("http")) {
+                            replyUrl = Utils.BBS_BASE_URL + "/" + replyUrl;
+                        }
+
                         builder = new StringBuilder(builder.substring(builder.indexOf("]") + 2));
                         int index = builder.indexOf("\n");
                         String line = builder.substring(0, index);
@@ -242,7 +256,7 @@ public class PostPageActivity extends Activity implements AbsListView.OnScrollLi
                         title = builder.substring(0, index);
                         content = builder.substring(index + 1).replace("\n", "<br />");
 
-                        replyList.add(new Reply(id, time, title, content));
+                        replyList.add(new Reply(id, time, title, content, replyUrl));
                     } catch (IndexOutOfBoundsException e) {
                         e.printStackTrace();
                     }
@@ -267,6 +281,18 @@ public class PostPageActivity extends Activity implements AbsListView.OnScrollLi
         protected void onPostExecute(Integer result) {
             invalidateOptionsMenu();
             onPostListGet(replyList, result, clear);
+        }
+    }
+
+    private class OnPostClickListener implements AdapterView.OnItemClickListener {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            if (Utils.USER_ID == null) {
+                Utils.login(PostPageActivity.this, null);
+            } else {
+                mAdapter.onItemClick(PostPageActivity.this, position, boardName);
+            }
         }
     }
 }

@@ -3,7 +3,7 @@ package com.jewelzqiu.sjtubbs.sections;
 import com.etsy.android.grid.util.DynamicHeightImageView;
 import com.jewelzqiu.sjtubbs.R;
 import com.jewelzqiu.sjtubbs.main.BBSApplication;
-import com.jewelzqiu.sjtubbs.page.PicViewPagerActivity;
+import com.jewelzqiu.sjtubbs.postpage.PicViewPagerActivity;
 import com.koushikdutta.ion.Ion;
 
 import android.content.Context;

@@ -50,6 +50,12 @@ public class Utils {
 
     public static HashMap<String, String> cookies = new HashMap<String, String>(3);
 
+    public static String getCookies() {
+        return COOKIE_UTMPNUM + "=" + cookies.get(COOKIE_UTMPNUM) + " ;" +
+                COOKIE_UTMPKEY + "=" + cookies.get(COOKIE_UTMPKEY) + " ;" +
+                COOKIE_UTMPUSERID + "=" + cookies.get(COOKIE_UTMPUSERID);
+    }
+
     public static void setInsets(Activity activity, View view) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             return;
@@ -210,7 +216,9 @@ public class Utils {
 
         @Override
         protected void onPostExecute(Void result) {
-            mListener.onLoginLogout();
+            if (mListener != null) {
+                mListener.onLoginLogout();
+            }
         }
     }
 

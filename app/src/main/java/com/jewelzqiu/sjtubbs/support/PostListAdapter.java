@@ -1,7 +1,7 @@
 package com.jewelzqiu.sjtubbs.support;
 
 import com.jewelzqiu.sjtubbs.R;
-import com.jewelzqiu.sjtubbs.page.PostPageActivity;
+import com.jewelzqiu.sjtubbs.postpage.PostPageActivity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -92,6 +92,7 @@ public class PostListAdapter extends BaseAdapter {
         Intent intent = new Intent(context, PostPageActivity.class);
         intent.putExtra(PostPageActivity.POST_URL, mPosts.get(position).url);
         intent.putExtra(PostPageActivity.PAGE_TITLE, mPosts.get(position).title);
+        intent.putExtra(PostPageActivity.BOARD_NAME, mPosts.get(position).board);
         DatabaseHelper dbHelper = new DatabaseHelper(mContext);
         dbHelper.setPostViewed(mPosts.get(position));
         context.startActivity(intent);

@@ -1,6 +1,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".sections.BoardActivity" >
+
+    <item android:id="@+id/action_post_new"
+        android:icon="@android:drawable/ic_menu_edit"
+        android:title="@string/post_new_article"
+        android:orderInCategory="100"
+        android:showAsAction="always" />
+
     <item android:id="@+id/action_uploaded"
         android:icon="@android:drawable/ic_menu_gallery"
         android:title="@string/action_uploaded"

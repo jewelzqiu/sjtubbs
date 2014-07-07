@@ -1,7 +1,8 @@
-package com.jewelzqiu.sjtubbs.page;
+package com.jewelzqiu.sjtubbs.postpage;
 
 import com.jewelzqiu.sjtubbs.R;
 import com.jewelzqiu.sjtubbs.main.BBSApplication;
+import com.jewelzqiu.sjtubbs.newpost.NewPostActivity;
 import com.jewelzqiu.sjtubbs.support.Reply;
 import com.jewelzqiu.sjtubbs.support.UrlDrawable;
 import com.jewelzqiu.sjtubbs.support.Utils;
@@ -91,13 +92,22 @@ public class PostPageAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void onItemClick(Context context, int position) {
-        Intent intent = new Intent(context, ReplyDetailActivity.class);
-        Reply reply = mReplyList.get(position);
-        intent.putExtra(ReplyDetailActivity.REPLY_USER, reply.userId);
-        intent.putExtra(ReplyDetailActivity.REPLY_TIME, reply.time);
-        intent.putExtra(ReplyDetailActivity.REPLY_TITLE, reply.title);
-        intent.putExtra(ReplyDetailActivity.REPLY_CONTENT, reply.content);
+    public void onItemClick(Context context, int position, String boardName) {
+//        Intent intent = new Intent(context, ReplyDetailActivity.class);
+//        Reply reply = mReplyList.get(position);
+//        intent.putExtra(ReplyDetailActivity.REPLY_USER, reply.userId);
+//        intent.putExtra(ReplyDetailActivity.REPLY_TIME, reply.time);
+//        intent.putExtra(ReplyDetailActivity.REPLY_TITLE, reply.title);
+//        intent.putExtra(ReplyDetailActivity.REPLY_CONTENT, reply.content);
+        String url = mReplyList.get(position).url;
+        if (url == null) {
+            return;
+        }
+        Intent intent = new Intent(context, NewPostActivity.class);
+        intent.putExtra(NewPostActivity.FLAG_IS_REPLY, true);
+        intent.putExtra(NewPostActivity.REPLY_URL, url);
+        intent.putExtra(NewPostActivity.REPLY_TO, mReplyList.get(position).userId);
+        intent.putExtra(NewPostActivity.BOARD_NAME, boardName);
         mContext.startActivity(intent);
     }
 

@@ -1,4 +1,4 @@
-<com.jewelzqiu.sjtubbs.page.HackyViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+<com.jewelzqiu.sjtubbs.postpage.HackyViewPager xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/view_pager"
     android:layout_width="match_parent"
     android:layout_height="match_parent" />

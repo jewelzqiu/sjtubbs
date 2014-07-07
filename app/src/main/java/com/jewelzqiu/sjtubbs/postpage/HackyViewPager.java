@@ -1,4 +1,4 @@
-package com.jewelzqiu.sjtubbs.page;
+package com.jewelzqiu.sjtubbs.postpage;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;

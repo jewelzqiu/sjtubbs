@@ -27,18 +27,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".page.ReplyDetailActivity" />
+        <activity android:name=".postpage.ReplyDetailActivity" />
         <activity android:name=".sections.BoardActivity" />
         <activity
-            android:name=".page.PicViewPagerActivity"
+            android:name=".postpage.PicViewPagerActivity"
             android:theme="@style/PicBrowserTheme" />
         <activity
-            android:name=".page.SinglePicActivity"
+            android:name=".postpage.SinglePicActivity"
             android:theme="@style/PicBrowserTheme" />
-        <activity android:name=".page.PostPageActivity" />
+        <activity android:name=".postpage.PostPageActivity" />
         <activity
             android:name=".sections.UploadedPicsActivity"
             android:label="@string/title_activity_uploaded_pics" />
+        <activity
+            android:name=".newpost.NewPostActivity"
+            android:label="@string/post_new_article" />
 
     </application>
 

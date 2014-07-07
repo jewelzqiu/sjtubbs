@@ -51,6 +51,15 @@
     <string name="pic_path">图片保存路径</string>
     <string name="github">Github</string>
 
+    <!--new post-->
+    <string name="post_new_article">发表文章</string>
+    <string name="send">发送</string>
+    <string name="title">标题</string>
+    <string name="input_title">请输入标题</string>
+    <string name="input_content">请输入内容</string>
+    <string name="post_success">发布成功</string>
+    <string name="post_failed">发布失败，请尝试重新登录</string>
+
     <!--exception-->
     <string name="send_log">发送错误报告</string>
 

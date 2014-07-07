@@ -1,6 +1,7 @@
 package com.jewelzqiu.sjtubbs.sections;
 
 import com.jewelzqiu.sjtubbs.R;
+import com.jewelzqiu.sjtubbs.newpost.NewPostActivity;
 import com.jewelzqiu.sjtubbs.support.OnPostsGetListener;
 import com.jewelzqiu.sjtubbs.support.Post;
 import com.jewelzqiu.sjtubbs.support.PostListAdapter;
@@ -118,16 +119,25 @@ public class BoardActivity extends Activity implements OnPostsGetListener,
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == android.R.id.home) {
-            finish();
-            return true;
-        } else if (id == R.id.action_uploaded) {
-            Intent intent = new Intent(this, UploadedPicsActivity.class);
-            intent.putExtra(UploadedPicsActivity.UPLOADED_URL,
-                    Utils.BBS_BASE_URL + "/bbsfdoc2?board=" + mBoardName);
-            intent.putExtra(BOARD_TITLE, getTitle());
-            startActivity(intent);
-            return true;
+        switch (id) {
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.action_uploaded:
+                Intent intent = new Intent(this, UploadedPicsActivity.class);
+                intent.putExtra(UploadedPicsActivity.UPLOADED_URL,
+                        Utils.BBS_BASE_URL + "/bbsfdoc2?board=" + mBoardName);
+                intent.putExtra(BOARD_TITLE, getTitle());
+                startActivity(intent);
+                return true;
+            case R.id.action_post_new:
+                intent = new Intent(this, NewPostActivity.class);
+                intent.putExtra(NewPostActivity.FLAG_IS_REPLY, false);
+                intent.putExtra(NewPostActivity.BOARD_NAME, mBoardName);
+                intent.putExtra(NewPostActivity.REPLY_URL,
+                        Utils.BBS_BASE_URL + "/bbswappst?board=" + mBoardName);
+                startActivity(intent);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

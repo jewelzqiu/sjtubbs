@@ -1,4 +1,4 @@
-package com.jewelzqiu.sjtubbs.page;
+package com.jewelzqiu.sjtubbs.postpage;
 
 import com.koushikdutta.ion.Ion;
 
