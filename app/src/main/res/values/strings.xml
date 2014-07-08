@@ -58,7 +58,7 @@
     <string name="input_title">请输入标题</string>
     <string name="input_content">请输入内容</string>
     <string name="post_success">发布成功</string>
-    <string name="post_failed">发布失败，请尝试重新登录</string>
+    <string name="post_failed">发布失败，请重试</string>
 
     <!--exception-->
     <string name="send_log">发送错误报告</string>

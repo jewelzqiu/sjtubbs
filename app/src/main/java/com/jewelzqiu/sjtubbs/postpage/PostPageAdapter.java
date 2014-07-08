@@ -93,14 +93,12 @@ public class PostPageAdapter extends BaseAdapter {
     }
 
     public void onItemClick(Context context, int position, String boardName) {
-//        Intent intent = new Intent(context, ReplyDetailActivity.class);
-//        Reply reply = mReplyList.get(position);
-//        intent.putExtra(ReplyDetailActivity.REPLY_USER, reply.userId);
-//        intent.putExtra(ReplyDetailActivity.REPLY_TIME, reply.time);
-//        intent.putExtra(ReplyDetailActivity.REPLY_TITLE, reply.title);
-//        intent.putExtra(ReplyDetailActivity.REPLY_CONTENT, reply.content);
         String url = mReplyList.get(position).url;
         if (url == null) {
+            return;
+        }
+        if (Utils.USER_ID == null) {
+            Utils.login(context, null);
             return;
         }
         Intent intent = new Intent(context, NewPostActivity.class);
@@ -159,48 +157,7 @@ public class PostPageAdapter extends BaseAdapter {
                     textView.setText(textView.getText());
                 }
             });
-//            new ImageGetterTask(urlDrawable).execute(source);
             return urlDrawable;
         }
-
-//        private class ImageGetterTask extends AsyncTask<String, Void, Drawable> {
-//
-//            UrlDrawable mDrawable;
-//
-//            public ImageGetterTask(UrlDrawable drawable) {
-//                mDrawable = drawable;
-//            }
-//
-//            @Override
-//            protected Drawable doInBackground(String... params) {
-//                String source = params[0];
-//                try {
-//                    InputStream is = fetch(source);
-//                    Drawable drawable = Drawable.createFromStream(is, "src");
-//                    drawable.setBounds(0, 0, drawable.getIntrinsicWidth(),
-//                            drawable.getIntrinsicHeight());
-//                    return drawable;
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//                return null;
-//            }
-//
-//            private InputStream fetch(String urlString) throws IOException {
-//                DefaultHttpClient httpClient = new DefaultHttpClient();
-//                HttpGet request = new HttpGet(urlString);
-//                HttpResponse response = httpClient.execute(request);
-//                return response.getEntity().getContent();
-//            }
-//
-//            @Override
-//            protected void onPostExecute(Drawable drawable) {
-//                mDrawable.setBounds(0, 0, drawable.getIntrinsicWidth(),
-//                        drawable.getIntrinsicHeight());
-//                mDrawable.setDrawable(drawable);
-//                TextView textView = (TextView) MyImageGetter.this.mContainer;
-//                textView.setText(textView.getText());
-//            }
-//        }
     }
 }

@@ -179,12 +179,7 @@ public class Utils {
                 || password.length() == 0) {
             return;
         }
-        new LoginTask(new OnLoginLogoutListener() {
-            @Override
-            public void onLoginLogout() {
-
-            }
-        }).execute(BBS_BASE_URL + "/bbswaplogin", username, password);
+        new LoginTask(null).execute(BBS_BASE_URL + "/bbswaplogin", username, password);
     }
 
     private static class LoginTask extends AsyncTask<String, Void, Void> {
@@ -231,46 +226,4 @@ public class Utils {
 
         public void onLoginLogout();
     }
-
-//"board"
-//Java
-//
-//"file"
-//M.1290147954.A
-//
-//"reidstr"
-//1290113508
-//
-//"reply_to_user"
-//superq
-//
-//title"
-//title
-//
-//"signature"
-//1
-//
-//"autocr"
-//on
-//
-//"text"
-//text
-//
-//"up"
-//""
-//
-//"MAX_FILE_SIZE"
-//1048577
-//
-//"board"
-//Java
-//
-//"level"
-//0
-//
-//"live"
-//180
-//
-//"exp"
-//""
 }

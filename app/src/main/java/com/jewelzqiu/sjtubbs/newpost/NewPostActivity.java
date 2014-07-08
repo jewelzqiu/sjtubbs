@@ -133,8 +133,8 @@ public class NewPostActivity extends Activity {
                     }
 
                     Element textArea = document.select("#text").first();
-                    content = textArea.text();
-                } catch (IOException e) {
+                    content = '\n' + textArea.text();
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
@@ -185,6 +185,9 @@ public class NewPostActivity extends Activity {
             if (s == null || s.contains("ERROR")) {
                 Toast.makeText(getApplicationContext(), getString(R.string.post_failed),
                         Toast.LENGTH_SHORT).show();
+                if (Utils.isAutoLoginEnabled(getApplicationContext())) {
+                    Utils.autoLogin(getApplicationContext());
+                }
             } else {
                 Toast.makeText(getApplicationContext(), getString(R.string.post_success),
                         Toast.LENGTH_SHORT).show();

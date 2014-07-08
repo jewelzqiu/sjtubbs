@@ -89,7 +89,12 @@ public class PostPageActivity extends Activity implements AbsListView.OnScrollLi
         mProgressBar = (ProgressBar) findViewById(R.id.progressbar);
         mPostListView = (ListView) findViewById(R.id.post_list);
         mPostListView.setOnScrollListener(this);
-        mPostListView.setOnItemClickListener(new OnPostClickListener());
+        mPostListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mAdapter.onItemClick(PostPageActivity.this, position, boardName);
+            }
+        });
         mFooterView = (ProgressBar) getLayoutInflater()
                 .inflate(R.layout.progressbar_loading, null);
         mPostListView.addFooterView(mFooterView);
@@ -281,18 +286,6 @@ public class PostPageActivity extends Activity implements AbsListView.OnScrollLi
         protected void onPostExecute(Integer result) {
             invalidateOptionsMenu();
             onPostListGet(replyList, result, clear);
-        }
-    }
-
-    private class OnPostClickListener implements AdapterView.OnItemClickListener {
-
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            if (Utils.USER_ID == null) {
-                Utils.login(PostPageActivity.this, null);
-            } else {
-                mAdapter.onItemClick(PostPageActivity.this, position, boardName);
-            }
         }
     }
 }
