@@ -22,6 +22,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    packagingOptions {
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+    }
 }
 
 dependencies {
@@ -34,4 +39,7 @@ dependencies {
     compile 'com.koushikdutta.ion:ion:1.2.4'
     compile 'com.etsy.android.grid:library:1.0.5'
     compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
+    compile 'org.apache.httpcomponents:httpcore:4.3'
+    compile 'org.apache.httpcomponents:httpclient:4.3.3'
+    compile 'org.apache.httpcomponents:httpmime:4.3'
 }

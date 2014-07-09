@@ -9,6 +9,9 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.InputStreamBody;
+import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
@@ -18,17 +21,31 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.ClipData;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by jewelzqiu on 7/7/14.
@@ -43,6 +60,10 @@ public class NewPostActivity extends Activity {
 
     public static final String BOARD_NAME = "board";
 
+    private static final int REQUEST_CODE_CAMERA = 6841368;
+
+    private static final int REQUEST_CODE_GALLERY = 6841369;
+
     private boolean isReply;
 
     private String replyToUser;
@@ -54,6 +75,12 @@ public class NewPostActivity extends Activity {
     private EditText titleText;
 
     private EditText contentText;
+
+    private Dialog mDialog;
+
+    private String photoPath;
+
+    private Uri[] photoUris;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,12 +118,96 @@ public class NewPostActivity extends Activity {
             case R.id.action_cancel:
                 finish();
                 break;
+            case R.id.action_upload:
+                selectPictures();
+                break;
             case R.id.action_send:
                 new PostTask().execute();
                 finish();
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK) {
+            super.onActivityResult(requestCode, resultCode, data);
+            return;
+        }
+
+        switch (requestCode) {
+            case REQUEST_CODE_CAMERA:
+                System.out.println(photoPath);
+                break;
+
+            case REQUEST_CODE_GALLERY:
+                if (data == null) {
+                    return;
+                }
+                if (data.getData() != null) {
+                    photoUris = new Uri[1];
+                    photoUris[0] = data.getData();
+                } else {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        ClipData clipData = data.getClipData();
+                        if (clipData != null) {
+                            Uri[] uris = new Uri[clipData.getItemCount()];
+                            for (int i = 0; i < clipData.getItemCount(); i++) {
+                                uris[i] = clipData.getItemAt(i).getUri();
+                            }
+                            photoUris = uris;
+                        }
+                    }
+                }
+                new UploadTask().execute(photoUris);
+                break;
+
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    private void selectPictures() {
+        if (mDialog == null) {
+            ListView listView = new ListView(this);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                    this,
+                    android.R.layout.simple_list_item_1,
+                    getResources().getStringArray(R.array.pic_select_options));
+            listView.setAdapter(adapter);
+            listView.setOnItemClickListener(new OnSelectPhotoListener());
+            mDialog = new AlertDialog.Builder(this).setView(listView).create();
+        }
+        mDialog.show();
+    }
+
+    private class OnSelectPhotoListener implements AdapterView.OnItemClickListener {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Intent intent;
+            switch (position) {
+                case 0: // take a photo
+                    photoPath = Utils.getPhotoPath();
+                    File photoFile = new File(photoPath);
+                    intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                    startActivityForResult(intent, REQUEST_CODE_CAMERA);
+                    break;
+
+                case 1: // select from gallery
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        intent = new Intent(Intent.ACTION_GET_CONTENT);
+                        intent.addCategory(Intent.CATEGORY_OPENABLE);
+                        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                        intent.setType("image/*");
+                        startActivityForResult(intent, REQUEST_CODE_GALLERY);
+                    }
+                    break;
+            }
+            mDialog.dismiss();
+        }
     }
 
     private class GetPostValuesTask extends AsyncTask<String, Void, Void> {
@@ -166,7 +277,7 @@ public class NewPostActivity extends Activity {
                 HttpPost httpPost = new HttpPost(Utils.BBS_BASE_URL + "/bbssnd");
                 DefaultHttpClient client = new DefaultHttpClient();
                 httpPost.addHeader("Cookie", Utils.getCookies());
-                httpPost.addHeader("Connection", "keep-live");
+                httpPost.addHeader("Connection", "keep-alive");
                 httpPost.setEntity(new UrlEncodedFormEntity(postValues, "GB2312"));
                 HttpResponse httpResponse = client.execute(httpPost);
                 return EntityUtils.toString(httpResponse.getEntity());
@@ -192,6 +303,68 @@ public class NewPostActivity extends Activity {
                 Toast.makeText(getApplicationContext(), getString(R.string.post_success),
                         Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    private class UploadTask extends AsyncTask<Uri, Integer, Void> {
+
+        ArrayList<String> fileUrlList = new ArrayList<>();
+
+        @Override
+        protected Void doInBackground(Uri... params) {
+            for (Uri uri : params) {
+                try {
+                    HttpPost httpPost = new HttpPost(Utils.BBS_BASE_URL + "/bbsdoupload");
+                    DefaultHttpClient httpClient = new DefaultHttpClient();
+                    httpPost.addHeader("Cookie", Utils.getCookies());
+                    httpPost.addHeader("Connection", "keep-alive");
+
+                    MultipartEntity entity = new MultipartEntity();
+
+                    entity.addPart("board", new StringBody(boardName));
+                    entity.addPart("level", new StringBody("0"));
+                    entity.addPart("live", new StringBody("180"));
+                    entity.addPart("exp", new StringBody(""));
+                    entity.addPart("MAX_FILE_SIZE", new StringBody("1048577"));
+                    entity.addPart("filename", new StringBody(uri.getLastPathSegment()));
+
+                    InputStream is = getContentResolver().openInputStream(uri);
+                    entity.addPart("up", new InputStreamBody(is, uri.getLastPathSegment()));
+
+//                    MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+//                    builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+//
+//                    builder.addTextBody("board", boardName);
+//                    builder.addTextBody("level", "0");
+//                    builder.addTextBody("live", "180");
+//                    builder.addTextBody("exp", "");
+//                    builder.addTextBody("MAX_FILE_SIZE", "1048577");
+//                    builder.addTextBody("filename", uri.getLastPathSegment());
+//
+//                    builder.addBinaryBody("up", is);
+
+                    System.out.println(entity.getContentLength());
+                    httpPost.setEntity(entity);
+
+                    System.out.println(Arrays.toString(httpPost.getAllHeaders()));
+
+                    HttpResponse response = httpClient.execute(httpPost);
+                    System.out.println(EntityUtils.toString(response.getEntity()));
+
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (ClientProtocolException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+
         }
     }
 }

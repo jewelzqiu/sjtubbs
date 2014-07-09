@@ -23,6 +23,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -220,6 +222,20 @@ public class Utils {
     public static boolean isAutoLoginEnabled(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         return preferences.getBoolean(context.getString(R.string.key_auto_login), true);
+    }
+
+    public static String getPhotoPath() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(PIC_STORE_PATH);
+        builder.append("/IMG_");
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+        builder.append(dateFormat.format(new Date()));
+        builder.append('_');
+        builder.append(System.currentTimeMillis() % 1000000);
+        builder.append(".jpg");
+
+        return builder.toString();
     }
 
     public interface OnLoginLogoutListener {

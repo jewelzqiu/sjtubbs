@@ -7,6 +7,11 @@
         android:icon="@android:drawable/ic_menu_close_clear_cancel"
         android:showAsAction="always" />
     <item
+        android:id="@+id/action_upload"
+        android:title="@string/upload"
+        android:icon="@android:drawable/ic_menu_upload"
+        android:showAsAction="always" />
+    <item
         android:id="@+id/action_send"
         android:title="@string/send"
         android:icon="@android:drawable/ic_menu_send"
