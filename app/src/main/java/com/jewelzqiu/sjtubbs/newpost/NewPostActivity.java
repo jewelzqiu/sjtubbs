@@ -9,9 +9,8 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.mime.MultipartEntity;
-import org.apache.http.entity.mime.content.InputStreamBody;
-import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
@@ -42,7 +41,6 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -148,6 +146,13 @@ public class NewPostActivity extends Activity {
                 if (data.getData() != null) {
                     photoUris = new Uri[1];
                     photoUris[0] = data.getData();
+//                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
+//                    Cursor cursor = getContentResolver()
+//                            .query(photoUris[0], filePathColumn, null, null, null);
+//                    cursor.moveToFirst();
+//                    String path = cursor.getString(cursor.getColumnIndex(filePathColumn[0]));
+//                    cursor.close();
+//                    System.out.println(path);
                 } else {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                         ClipData clipData = data.getClipData();
@@ -203,6 +208,10 @@ public class NewPostActivity extends Activity {
                         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                         intent.setType("image/*");
                         startActivityForResult(intent, REQUEST_CODE_GALLERY);
+                    } else {
+                        intent = new Intent(Intent.ACTION_PICK,
+                                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(intent, REQUEST_CODE_GALLERY);
                     }
                     break;
             }
@@ -237,7 +246,8 @@ public class NewPostActivity extends Activity {
                         if (element.attr("name").equals("file")) {
                             postValues.add(new BasicNameValuePair("file", element.attr("value")));
                         } else if (element.attr("name").equals("reidstr")) {
-                            postValues.add(new BasicNameValuePair("reidstr", element.attr("value")));
+                            postValues
+                                    .add(new BasicNameValuePair("reidstr", element.attr("value")));
                         } else if (element.attr("name").equals("title")) {
                             title = element.attr("value");
                         }
@@ -308,47 +318,77 @@ public class NewPostActivity extends Activity {
 
     private class UploadTask extends AsyncTask<Uri, Integer, Void> {
 
-        ArrayList<String> fileUrlList = new ArrayList<>();
-
         @Override
-        protected Void doInBackground(Uri... params) {
-            for (Uri uri : params) {
+        protected Void doInBackground(Uri... uris) {
+            for (Uri uri : uris) {
                 try {
                     HttpPost httpPost = new HttpPost(Utils.BBS_BASE_URL + "/bbsdoupload");
+
+
+//                    HttpParams params = new BasicHttpParams();
+//                    HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
+//                    HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
+//                    HttpProtocolParams.setUseExpectContinue(params, true);
+//                    HttpProtocolParams
+//                            .setUserAgent(
+//                                    params,
+//                                    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, "
+//                                            + "like Gecko) Chrome/35.0.1916.153 Safari/537.36"
+//                            );
+//
+//                    ConnManagerParams.setTimeout(params, 1000);
+//                    HttpConnectionParams.setConnectionTimeout(params, 4000);
+//                    HttpConnectionParams.setSoTimeout(params, 20000);
+//
+//                    SchemeRegistry schReg = new SchemeRegistry();
+//                    schReg.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
+//                    schReg.register(new Scheme("https", SSLSocketFactory.getSocketFactory(), 443));
+//
+//                    ClientConnectionManager conMgr = new ThreadSafeClientConnManager(params, schReg);
+//                    HttpClient httpClient = new DefaultHttpClient(conMgr, params);
+
+
                     DefaultHttpClient httpClient = new DefaultHttpClient();
                     httpPost.addHeader("Cookie", Utils.getCookies());
                     httpPost.addHeader("Connection", "keep-alive");
 
-                    MultipartEntity entity = new MultipartEntity();
-
-                    entity.addPart("board", new StringBody(boardName));
-                    entity.addPart("level", new StringBody("0"));
-                    entity.addPart("live", new StringBody("180"));
-                    entity.addPart("exp", new StringBody(""));
-                    entity.addPart("MAX_FILE_SIZE", new StringBody("1048577"));
-                    entity.addPart("filename", new StringBody(uri.getLastPathSegment()));
-
-                    InputStream is = getContentResolver().openInputStream(uri);
-                    entity.addPart("up", new InputStreamBody(is, uri.getLastPathSegment()));
-
-//                    MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-//                    builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+//                    MultipartEntity entity = new MultipartEntity();
 //
-//                    builder.addTextBody("board", boardName);
-//                    builder.addTextBody("level", "0");
-//                    builder.addTextBody("live", "180");
-//                    builder.addTextBody("exp", "");
-//                    builder.addTextBody("MAX_FILE_SIZE", "1048577");
-//                    builder.addTextBody("filename", uri.getLastPathSegment());
+//                    entity.addPart("board", new StringBody(boardName));
+//                    entity.addPart("file", new StringBody(""));
+//                    entity.addPart("reidstr", new StringBody(""));
+//                    entity.addPart("reply_to_user", new StringBody(""));
+//                    entity.addPart("title", new StringBody(""));
+//                    entity.addPart("signature", new StringBody("1"));
+//                    entity.addPart("autocr", new StringBody("on"));
+//                    entity.addPart("text", new StringBody(""));
 //
-//                    builder.addBinaryBody("up", is);
+//                    entity.addPart("MAX_FILE_SIZE", new StringBody("1048577"));
+//                    entity.addPart("level", new StringBody("0"));
+//                    entity.addPart("live", new StringBody("180"));
+//                    entity.addPart("exp", new StringBody(""));
+//
+//                    File file = Utils.saveTempFile(NewPostActivity.this, uri);
+//                    entity.addPart("up", new FileBody(file));
+//                    entity.addPart("filename", new StringBody(file.getName()));
 
-                    System.out.println(entity.getContentLength());
-                    httpPost.setEntity(entity);
+                    MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+                    builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
 
-                    System.out.println(Arrays.toString(httpPost.getAllHeaders()));
+                    builder.addTextBody("board", boardName);
+                    builder.addTextBody("level", "0");
+                    builder.addTextBody("live", "180");
+                    builder.addTextBody("exp", "");
+                    builder.addTextBody("MAX_FILE_SIZE", "1048577");
 
+                    File file = Utils.saveTempFile(NewPostActivity.this, uri);
+                    builder.addBinaryBody("up", file);
+                    builder.addTextBody("filename", file.getName());
+
+                    httpPost.setEntity(builder.build());
                     HttpResponse response = httpClient.execute(httpPost);
+
+                    System.out.println(Arrays.toString(response.getAllHeaders()));
                     System.out.println(EntityUtils.toString(response.getEntity()));
 
                 } catch (FileNotFoundException e) {

@@ -11,6 +11,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.preference.PreferenceManager;
@@ -22,7 +23,12 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -236,6 +242,48 @@ public class Utils {
         builder.append(".jpg");
 
         return builder.toString();
+    }
+
+    public static File saveTempFile(Context context, Uri uri) throws IOException {
+        InputStream inputStream = context.getContentResolver().openInputStream(uri);
+        String path = getTempPhotoPath(context);
+        if (path == null || path.length() == 0) {
+            return null;
+        }
+        File file = new File(path);
+        file.getParentFile().mkdirs();
+        if (file.exists() || file.length() > 0) {
+            file.delete();
+        }
+        file.createNewFile();
+        saveInputStreamToFile(inputStream, file);
+        return file;
+    }
+
+    public static String getTempPhotoPath(Context context) {
+        if (PIC_CACHE_PATH == null) {
+            File cacheDir = context.getExternalCacheDir();
+            if (cacheDir == null) {
+                Toast.makeText(context, context.getString(R.string.storage_failed),
+                        Toast.LENGTH_SHORT).show();
+                return null;
+            }
+            PIC_CACHE_PATH = cacheDir.getAbsolutePath();
+        }
+        return PIC_CACHE_PATH + "/" + System.currentTimeMillis() + ".jpg";
+    }
+
+    public static void saveInputStreamToFile(InputStream in, File file) throws IOException {
+        BufferedInputStream bufferedInputStream = new BufferedInputStream(in);
+        FileOutputStream outputStream = new FileOutputStream(file);
+        BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);
+        byte[] buffer = new byte[1024];
+        int len;
+        while ((len = bufferedInputStream.read(buffer)) != -1) {
+            bufferedOutputStream.write(buffer, 0, len);
+        }
+        bufferedInputStream.close();
+        bufferedOutputStream.close();
     }
 
     public interface OnLoginLogoutListener {
