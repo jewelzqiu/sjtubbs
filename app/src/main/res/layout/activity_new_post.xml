@@ -9,13 +9,23 @@
     android:layout_marginBottom="@dimen/activity_vertical_margin"
     android:fitsSystemWindows="true">
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/thumbnail_list"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/thumbnails_height"
+        android:layout_marginBottom="10dp"
+        android:clipToPadding="false"
+        android:scrollbars="none"
+        android:visibility="gone" />
+
     <TextView
         android:id="@+id/textview_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
+        android:layout_below="@id/thumbnail_list"
         android:text="@string/title"
-        android:textColor="@color/sjtublue"/>
+        android:textColor="@color/sjtublue" />
 
     <EditText
         android:id="@+id/edittext_title"
@@ -23,7 +33,7 @@
         android:layout_height="wrap_content"
         android:singleLine="true"
         android:hint="@string/input_title"
-        android:layout_below="@id/textview_title"/>
+        android:layout_below="@id/textview_title" />
 
     <TextView
         android:id="@+id/textview_content"
@@ -33,7 +43,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginBottom="5dp"
         android:text="@string/content"
-        android:textColor="@color/sjtublue"/>
+        android:textColor="@color/sjtublue" />
 
     <EditText
         android:id="@+id/edittext_content"
@@ -42,6 +52,6 @@
         android:layout_below="@id/textview_content"
         android:layout_alignParentBottom="true"
         android:gravity="start"
-        android:hint="@string/input_content"/>
+        android:hint="@string/input_content" />
 
 </RelativeLayout>

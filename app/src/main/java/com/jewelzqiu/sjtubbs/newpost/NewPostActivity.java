@@ -25,17 +25,23 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ClipData;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -76,6 +82,10 @@ public class NewPostActivity extends Activity {
 
     private Dialog mDialog;
 
+    private RecyclerView thumbnailList;
+
+    private ThumbnailAdapter mAdapter;
+
     private String photoPath;
 
     private Uri[] photoUris;
@@ -84,8 +94,13 @@ public class NewPostActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_post);
+        thumbnailList = (RecyclerView) findViewById(R.id.thumbnail_list);
         titleText = (EditText) findViewById(R.id.edittext_title);
         contentText = (EditText) findViewById(R.id.edittext_content);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this,
+                LinearLayoutManager.HORIZONTAL, false);
+        thumbnailList.setLayoutManager(layoutManager);
 
         postValues.clear();
         Intent intent = getIntent();
@@ -146,13 +161,6 @@ public class NewPostActivity extends Activity {
                 if (data.getData() != null) {
                     photoUris = new Uri[1];
                     photoUris[0] = data.getData();
-//                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
-//                    Cursor cursor = getContentResolver()
-//                            .query(photoUris[0], filePathColumn, null, null, null);
-//                    cursor.moveToFirst();
-//                    String path = cursor.getString(cursor.getColumnIndex(filePathColumn[0]));
-//                    cursor.close();
-//                    System.out.println(path);
                 } else {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                         ClipData clipData = data.getClipData();
@@ -316,10 +324,10 @@ public class NewPostActivity extends Activity {
         }
     }
 
-    private class UploadTask extends AsyncTask<Uri, Integer, String> {
+    private class UploadTask extends AsyncTask<Uri, String, Void> {
 
         @Override
-        protected String doInBackground(Uri... uris) {
+        protected Void doInBackground(Uri... uris) {
             for (Uri uri : uris) {
                 try {
                     HttpPost httpPost = new HttpPost(Utils.BBS_BASE_URL + "/bbsdoupload");
@@ -348,7 +356,8 @@ public class NewPostActivity extends Activity {
 
                     Document doc = Jsoup.parse(responseHtml);
                     String url = doc.select("p > font").text();
-                    return url;
+                    publishProgress(url, file.getAbsolutePath());
+
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } catch (ClientProtocolException e) {
@@ -361,18 +370,104 @@ public class NewPostActivity extends Activity {
         }
 
         @Override
-        protected void onPostExecute(String result) {
-            if (result == null) {
-                Toast.makeText(getApplicationContext(), getString(R.string.upload_failed),
-                        Toast.LENGTH_SHORT).show();
+        protected void onProgressUpdate(String... values) {
+            final String url = values[0];
+            if (url == null) {
                 return;
             }
-            Toast.makeText(getApplicationContext(), getString(R.string.upload_success),
-                    Toast.LENGTH_SHORT).show();
+            if (thumbnailList.getVisibility() == View.GONE) {
+                thumbnailList.setVisibility(View.VISIBLE);
+            }
+            if (mAdapter == null) {
+                ArrayList<String> fileList = new ArrayList<String>();
+                mAdapter = new ThumbnailAdapter(fileList);
+                thumbnailList.setAdapter(mAdapter);
+            }
+            mAdapter.appendFile(values[1]);
+
+            thumbnailList.setAdapter(mAdapter);
             int start = Math.max(contentText.getSelectionStart(), 0);
             int end = Math.max(contentText.getSelectionEnd(), 0);
             contentText.getText().replace(Math.min(start, end), Math.max(start, end),
-                    result, 0, result.length());
+                    url, 0, url.length());
+
+        }
+    }
+
+    private class ThumbnailAdapter extends RecyclerView.Adapter<ThumbnailAdapter.MyViewHolder> {
+
+        private ArrayList<String> thumbFileList;
+
+        public ThumbnailAdapter(ArrayList<String> fileList) {
+            thumbFileList = fileList;
+        }
+
+        public void appendFile(String filepath) {
+            thumbFileList.add(filepath);
+            notifyDataSetChanged();
+        }
+
+        public void appendFileList(ArrayList<String> fileList) {
+            thumbFileList.addAll(fileList);
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            ImageView view = (ImageView) LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.thumbnail_list_item, parent, false);
+            MyViewHolder holder = new MyViewHolder(view);
+            return holder;
+        }
+
+        @Override
+        public void onBindViewHolder(MyViewHolder holder, int position) {
+            new DecodeImageTask(holder.mImageView,
+                    getResources().getDimensionPixelSize(R.dimen.thumbnails_height),
+                    getResources().getDimensionPixelSize(R.dimen.thumbnails_height))
+                    .execute(thumbFileList.get(position));
+        }
+
+        @Override
+        public int getItemCount() {
+            return thumbFileList.size();
+        }
+
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+
+            public ImageView mImageView;
+
+            public MyViewHolder(ImageView view) {
+                super(view);
+                mImageView = view;
+            }
+        }
+    }
+
+    private class DecodeImageTask extends AsyncTask<String, Void, Bitmap> {
+
+        private ImageView mImageView;
+
+        private int mWidth;
+
+        private int mHeight;
+
+        public DecodeImageTask(ImageView imageView, int width, int height) {
+            mImageView = imageView;
+            mWidth = width;
+            mHeight = height;
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            return Utils.decodeBitmap(params[0], mWidth, mHeight);
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            if (bitmap != null) {
+                mImageView.setImageBitmap(bitmap);
+            }
         }
     }
 }

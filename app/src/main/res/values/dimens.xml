@@ -9,4 +9,6 @@
 
     <!-- Text size for action bar titles -->
     <dimen name="action_bar_title_text_size">18dp</dimen>
+
+    <dimen name="thumbnails_height">50dp</dimen>
 </resources>
