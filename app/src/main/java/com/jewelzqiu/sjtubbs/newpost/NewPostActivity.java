@@ -44,7 +44,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created by jewelzqiu on 7/7/14.
@@ -325,53 +324,9 @@ public class NewPostActivity extends Activity {
                 try {
                     HttpPost httpPost = new HttpPost(Utils.BBS_BASE_URL + "/bbsdoupload");
 
-
-//                    HttpParams params = new BasicHttpParams();
-//                    HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
-//                    HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
-//                    HttpProtocolParams.setUseExpectContinue(params, true);
-//                    HttpProtocolParams
-//                            .setUserAgent(
-//                                    params,
-//                                    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, "
-//                                            + "like Gecko) Chrome/35.0.1916.153 Safari/537.36"
-//                            );
-//
-//                    ConnManagerParams.setTimeout(params, 1000);
-//                    HttpConnectionParams.setConnectionTimeout(params, 4000);
-//                    HttpConnectionParams.setSoTimeout(params, 20000);
-//
-//                    SchemeRegistry schReg = new SchemeRegistry();
-//                    schReg.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
-//                    schReg.register(new Scheme("https", SSLSocketFactory.getSocketFactory(), 443));
-//
-//                    ClientConnectionManager conMgr = new ThreadSafeClientConnManager(params, schReg);
-//                    HttpClient httpClient = new DefaultHttpClient(conMgr, params);
-
-
                     DefaultHttpClient httpClient = new DefaultHttpClient();
                     httpPost.addHeader("Cookie", Utils.getCookies());
                     httpPost.addHeader("Connection", "keep-alive");
-
-//                    MultipartEntity entity = new MultipartEntity();
-//
-//                    entity.addPart("board", new StringBody(boardName));
-//                    entity.addPart("file", new StringBody(""));
-//                    entity.addPart("reidstr", new StringBody(""));
-//                    entity.addPart("reply_to_user", new StringBody(""));
-//                    entity.addPart("title", new StringBody(""));
-//                    entity.addPart("signature", new StringBody("1"));
-//                    entity.addPart("autocr", new StringBody("on"));
-//                    entity.addPart("text", new StringBody(""));
-//
-//                    entity.addPart("MAX_FILE_SIZE", new StringBody("1048577"));
-//                    entity.addPart("level", new StringBody("0"));
-//                    entity.addPart("live", new StringBody("180"));
-//                    entity.addPart("exp", new StringBody(""));
-//
-//                    File file = Utils.saveTempFile(NewPostActivity.this, uri);
-//                    entity.addPart("up", new FileBody(file));
-//                    entity.addPart("filename", new StringBody(file.getName()));
 
                     MultipartEntityBuilder builder = MultipartEntityBuilder.create();
                     builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
@@ -383,14 +338,13 @@ public class NewPostActivity extends Activity {
                     builder.addTextBody("MAX_FILE_SIZE", "1048577");
 
                     File file = Utils.saveTempFile(NewPostActivity.this, uri);
-                    builder.addBinaryBody("up", file, ContentType.create("image/png"), file.getName());
+                    builder.addBinaryBody("up", file, ContentType.create("image/jpeg"),
+                            file.getName());
 
                     httpPost.setEntity(builder.build());
                     HttpResponse response = httpClient.execute(httpPost);
 
-                    System.out.println(Arrays.toString(response.getAllHeaders()));
                     String responseHtml = EntityUtils.toString(response.getEntity());
-                    System.out.println(responseHtml);
 
                     Document doc = Jsoup.parse(responseHtml);
                     String url = doc.select("p > font").text();
@@ -408,7 +362,9 @@ public class NewPostActivity extends Activity {
 
         @Override
         protected void onPostExecute(String result) {
-            if(result == null) return;
+            if (result == null) {
+                return;
+            }
             int start = Math.max(contentText.getSelectionStart(), 0);
             int end = Math.max(contentText.getSelectionEnd(), 0);
             contentText.getText().replace(Math.min(start, end), Math.max(start, end),
