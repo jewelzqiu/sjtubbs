@@ -363,8 +363,12 @@ public class NewPostActivity extends Activity {
         @Override
         protected void onPostExecute(String result) {
             if (result == null) {
+                Toast.makeText(getApplicationContext(), getString(R.string.upload_failed),
+                        Toast.LENGTH_SHORT).show();
                 return;
             }
+            Toast.makeText(getApplicationContext(), getString(R.string.upload_success),
+                    Toast.LENGTH_SHORT).show();
             int start = Math.max(contentText.getSelectionStart(), 0);
             int end = Math.max(contentText.getSelectionEnd(), 0);
             contentText.getText().replace(Math.min(start, end), Math.max(start, end),

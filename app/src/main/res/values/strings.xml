@@ -60,6 +60,9 @@
     <string name="input_content">请输入内容</string>
     <string name="post_success">发布成功</string>
     <string name="post_failed">发布失败，请重试</string>
+    <string name="upload_success">上传成功</string>
+    <string name="upload_failed">上传失败，请重试</string>
+    <string name="require_relogin">请重新登录</string>
 
     <!--exception-->
     <string name="send_log">发送错误报告</string>
