@@ -338,7 +338,7 @@ public class NewPostActivity extends Activity {
                     builder.addTextBody("MAX_FILE_SIZE", "1048577");
 
                     File file = Utils.saveTempFile(NewPostActivity.this, uri);
-                    builder.addBinaryBody("up", file, ContentType.create("image/jpeg"),
+                    builder.addBinaryBody("up", file, ContentType.APPLICATION_FORM_URLENCODED,
                             file.getName());
 
                     httpPost.setEntity(builder.build());
