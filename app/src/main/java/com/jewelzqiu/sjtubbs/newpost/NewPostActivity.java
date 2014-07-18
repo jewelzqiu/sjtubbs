@@ -9,6 +9,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -316,10 +317,10 @@ public class NewPostActivity extends Activity {
         }
     }
 
-    private class UploadTask extends AsyncTask<Uri, Integer, Void> {
+    private class UploadTask extends AsyncTask<Uri, Integer, String> {
 
         @Override
-        protected Void doInBackground(Uri... uris) {
+        protected String doInBackground(Uri... uris) {
             for (Uri uri : uris) {
                 try {
                     HttpPost httpPost = new HttpPost(Utils.BBS_BASE_URL + "/bbsdoupload");
@@ -382,15 +383,18 @@ public class NewPostActivity extends Activity {
                     builder.addTextBody("MAX_FILE_SIZE", "1048577");
 
                     File file = Utils.saveTempFile(NewPostActivity.this, uri);
-                    builder.addBinaryBody("up", file);
-                    builder.addTextBody("filename", file.getName());
+                    builder.addBinaryBody("up", file, ContentType.create("image/png"), file.getName());
 
                     httpPost.setEntity(builder.build());
                     HttpResponse response = httpClient.execute(httpPost);
 
                     System.out.println(Arrays.toString(response.getAllHeaders()));
-                    System.out.println(EntityUtils.toString(response.getEntity()));
+                    String responseHtml = EntityUtils.toString(response.getEntity());
+                    System.out.println(responseHtml);
 
+                    Document doc = Jsoup.parse(responseHtml);
+                    String url = doc.select("p > font").text();
+                    return url;
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } catch (ClientProtocolException e) {
@@ -403,8 +407,12 @@ public class NewPostActivity extends Activity {
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
-
+        protected void onPostExecute(String result) {
+            if(result == null) return;
+            int start = Math.max(contentText.getSelectionStart(), 0);
+            int end = Math.max(contentText.getSelectionEnd(), 0);
+            contentText.getText().replace(Math.min(start, end), Math.max(start, end),
+                    result, 0, result.length());
         }
     }
 }
