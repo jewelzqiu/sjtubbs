@@ -33,6 +33,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -386,11 +387,26 @@ public class NewPostActivity extends Activity {
             mAdapter.appendFile(values[1]);
 
             thumbnailList.setAdapter(mAdapter);
+            
             int start = Math.max(contentText.getSelectionStart(), 0);
             int end = Math.max(contentText.getSelectionEnd(), 0);
-            contentText.getText().replace(Math.min(start, end), Math.max(start, end),
-                    url, 0, url.length());
-
+            if (start > end) {
+                int temp = start;
+                start = end;
+                end = temp;
+            }
+            if (start == 0) {
+                contentText.getText().replace(start, end, url, 0, url.length());
+            } else {
+                Editable editable = contentText.getText();
+                char[] beforeChar = new char[1];
+                editable.getChars(start - 1, start, beforeChar, 0);
+                if (beforeChar[0] == '\n') {
+                    contentText.getText().replace(start, end, url, 0, url.length());
+                } else {
+                    contentText.getText().replace(start, end, '\n' + url, 0, url.length() + 1);
+                }
+            }
         }
     }
 
