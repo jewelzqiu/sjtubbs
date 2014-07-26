@@ -350,6 +350,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Document doc = Jsoup.connect(Utils.BBS_BASE_URL + "/bbsqry?userid=" + userId).get();
         Elements elements = doc.select("pre.tight font");
+        if (elements.size() <= 6) {
+            throw new IOException("Get user sex error");
+        }
         String fontClass = elements.get(6).className();
         int color = R.color.male;
         sex = 1;
