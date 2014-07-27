@@ -25,8 +25,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -257,9 +257,12 @@ public class Utils {
         if (file.exists() || file.length() > 0) {
             file.delete();
         }
-        file.createNewFile();
-        saveInputStreamToFile(inputStream, file);
-        return file;
+        if (file.createNewFile()) {
+            saveInputStreamToFile(inputStream, file);
+            return file;
+        } else {
+            return null;
+        }
     }
 
     public static String getTempPhotoPath(Context context) {
@@ -276,15 +279,19 @@ public class Utils {
     }
 
     public static void saveInputStreamToFile(InputStream in, File file) throws IOException {
-        BufferedInputStream bufferedInputStream = new BufferedInputStream(in);
+        Bitmap bitmap = BitmapFactory.decodeStream(in);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        int quality = 100;
+        bitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos);
+        while (baos.size() > 1048576) { // cannot upload file which size bigger than 1MB.
+            baos.reset();
+            quality -= 10;
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos);
+        }
+
         FileOutputStream outputStream = new FileOutputStream(file);
         BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);
-        byte[] buffer = new byte[1024];
-        int len;
-        while ((len = bufferedInputStream.read(buffer)) != -1) {
-            bufferedOutputStream.write(buffer, 0, len);
-        }
-        bufferedInputStream.close();
+        bufferedOutputStream.write(baos.toByteArray());
         bufferedOutputStream.close();
     }
 

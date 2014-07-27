@@ -347,6 +347,9 @@ public class NewPostActivity extends Activity {
                     builder.addTextBody("MAX_FILE_SIZE", "1048577");
 
                     File file = Utils.saveTempFile(NewPostActivity.this, uri);
+                    if (file == null) {
+                        continue;
+                    }
                     builder.addBinaryBody("up", file, ContentType.APPLICATION_FORM_URLENCODED,
                             file.getName());
 
@@ -387,7 +390,7 @@ public class NewPostActivity extends Activity {
             mAdapter.appendFile(values[1]);
 
             thumbnailList.setAdapter(mAdapter);
-            
+
             int start = Math.max(contentText.getSelectionStart(), 0);
             int end = Math.max(contentText.getSelectionEnd(), 0);
             if (start > end) {
