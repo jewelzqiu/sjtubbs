@@ -3,13 +3,13 @@ package com.jewelzqiu.sjtubbs.postpage;
 import com.jewelzqiu.sjtubbs.R;
 import com.jewelzqiu.sjtubbs.main.BBSApplication;
 
-import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 
-public class PicViewPagerActivity extends Activity {
+public class PicViewPagerActivity extends ActionBarActivity {
 
     public static final String PHOTO_POSITION = "photo_pos";
 

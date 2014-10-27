@@ -1,7 +1,6 @@
 package com.jewelzqiu.sjtubbs.support;
 
 import com.jewelzqiu.sjtubbs.R;
-import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -15,7 +14,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.view.LayoutInflater;
@@ -67,13 +65,13 @@ public class Utils {
     }
 
     public static void setInsets(Activity activity, View view) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-            return;
-        }
-        SystemBarTintManager tintManager = new SystemBarTintManager(activity);
-        SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
-        view.setPadding(0, config.getPixelInsetTop(true), config.getPixelInsetRight(),
-                config.getPixelInsetBottom());
+//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+//            return;
+//        }
+//        SystemBarTintManager tintManager = new SystemBarTintManager(activity);
+//        SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
+//        view.setPadding(0, config.getPixelInsetTop(true), config.getPixelInsetRight(),
+//                config.getPixelInsetBottom());
     }
 
     public static boolean isMarkReadEnabled(Context context) {
@@ -82,6 +80,40 @@ public class Utils {
             return true;
         }
         return preferences.getBoolean(context.getString(R.string.key_mark_read), true);
+    }
+
+    public static void setPostTitleColor(Context context, DatabaseHelper dbHelper, TextView view, Post post) {
+        new SetPostTitleColorTask(context, dbHelper, post, view).execute();
+    }
+
+    private static class SetPostTitleColorTask extends AsyncTask<Void, Void, Integer> {
+
+        private Context mContext;
+        private DatabaseHelper mDatabaseHelper;
+        private TextView mTextView;
+        private Post mPost;
+
+        private SetPostTitleColorTask(Context context,
+                DatabaseHelper databaseHelper, Post post, TextView textView) {
+            mContext = context;
+            mDatabaseHelper = databaseHelper;
+            mPost = post;
+            mTextView = textView;
+        }
+
+        @Override
+        protected Integer doInBackground(Void... params) {
+            if (isMarkReadEnabled(mContext) && mDatabaseHelper.isPostViewed(mPost)) {
+                return android.R.color.darker_gray;
+            } else {
+                return R.color.sjtublue;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Integer color) {
+            mTextView.setTextColor(mContext.getResources().getColor(color));
+        }
     }
 
     public static void setSexColor(TextView view, String userId) {

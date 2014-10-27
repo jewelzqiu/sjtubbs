@@ -1,9 +1,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".page.PostPageActivity" >
     <item android:id="@+id/action_pic"
-        android:icon="@android:drawable/ic_menu_gallery"
+        android:icon="@drawable/ic_photo_album_white"
         android:title="@string/action_pic"
         android:orderInCategory="100"
-        android:showAsAction="always" />
+        app:showAsAction="always" />
 </menu>

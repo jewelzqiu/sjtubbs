@@ -71,10 +71,7 @@ public class PostListAdapter extends BaseAdapter {
             holder.boardView.setText(post.board);
         }
 
-        if (Utils.isMarkReadEnabled(mContext) && mDatabaseHelper.isPostViewed(post)) {
-            holder.titleView
-                    .setTextColor(mContext.getResources().getColor(android.R.color.darker_gray));
-        }
+        Utils.setPostTitleColor(mContext, mDatabaseHelper, holder.titleView, post);
 
         return view;
     }

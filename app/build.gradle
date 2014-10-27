@@ -1,15 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion "19.1.0"
+    compileSdkVersion 21
+    buildToolsVersion "21.0.2"
 
     defaultConfig {
         applicationId "com.jewelzqiu.sjtubbs"
         minSdkVersion 14
-        targetSdkVersion 19
-        versionCode 20
-        versionName "0.5.2"
+        targetSdkVersion 21
+        versionCode 21
+        versionName "0.5.3"
     }
 
     compileOptions {
@@ -32,6 +32,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:support-v4:+'
+    compile 'com.android.support:appcompat-v7:+'
     compile 'com.android.support:cardview-v7:+'
     compile 'com.android.support:recyclerview-v7:+'
     compile 'org.jsoup:jsoup:1.7.3'
@@ -39,7 +40,7 @@ dependencies {
     compile 'com.github.chrisbanes.photoview:library:1.2.3'
     compile 'com.koushikdutta.ion:ion:1.2.4'
     compile 'com.etsy.android.grid:library:1.0.5'
-    compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
+//    compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
     compile 'org.apache.httpcomponents:httpcore:4.3'
     compile 'org.apache.httpcomponents:httpclient:4.3.3'
     compile 'org.apache.httpcomponents:httpmime:4.3'

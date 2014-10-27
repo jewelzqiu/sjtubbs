@@ -2,12 +2,10 @@ package com.jewelzqiu.sjtubbs.settings;
 
 import com.jewelzqiu.sjtubbs.R;
 import com.jewelzqiu.sjtubbs.support.Utils;
-import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -102,15 +100,15 @@ public class SettingsFragment extends PreferenceFragment implements Utils.OnLogi
         ListView listView = (ListView) view.findViewById(android.R.id.list);
 //        listView.setFitsSystemWindows(true);
         listView.setClipToPadding(false);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            SystemBarTintManager tintManager = new SystemBarTintManager(getActivity());
-            SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
-            listView.setPadding(
-                    (int) getResources().getDimension(R.dimen.activity_horizontal_margin),
-                    config.getPixelInsetTop(true),
-                    (int) getResources().getDimension(R.dimen.activity_horizontal_margin),
-                    config.getPixelInsetBottom());
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            SystemBarTintManager tintManager = new SystemBarTintManager(getActivity());
+//            SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
+//            listView.setPadding(
+//                    (int) getResources().getDimension(R.dimen.activity_horizontal_margin),
+//                    config.getPixelInsetTop(true),
+//                    (int) getResources().getDimension(R.dimen.activity_horizontal_margin),
+//                    config.getPixelInsetBottom());
+//        }
     }
 
     @Override

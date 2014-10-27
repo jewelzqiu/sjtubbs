@@ -6,19 +6,18 @@ import com.jewelzqiu.sjtubbs.sections.SectionsFragment;
 import com.jewelzqiu.sjtubbs.settings.SettingsFragment;
 import com.jewelzqiu.sjtubbs.support.MyExceptionHandler;
 import com.jewelzqiu.sjtubbs.topten.TopTenFragment;
-import com.readystatesoftware.systembartint.SystemBarTintManager;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class MainActivity extends Activity
+public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks/*, OnSectionsGetListener*/ {
 
     /**
@@ -62,11 +61,11 @@ public class MainActivity extends Activity
 
         //new GetSectionsTask(this).execute();
 
-        SystemBarTintManager tintManager = new SystemBarTintManager(this);
-        tintManager.setStatusBarTintEnabled(true);
-        tintManager.setNavigationBarTintEnabled(true);
-        tintManager.setTintColor(getResources().getColor(android.R.color.holo_blue_dark));
-        tintManager.setTintAlpha(0.69f);
+//        SystemBarTintManager tintManager = new SystemBarTintManager(this);
+//        tintManager.setStatusBarTintEnabled(true);
+//        tintManager.setNavigationBarTintEnabled(true);
+//        tintManager.setTintColor(getResources().getColor(android.R.color.holo_blue_dark));
+//        tintManager.setTintAlpha(0.69f);
 
         Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));
     }
@@ -110,7 +109,7 @@ public class MainActivity extends Activity
     }
 
     public void restoreActionBar() {
-        ActionBar actionBar = getActionBar();
+        ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);

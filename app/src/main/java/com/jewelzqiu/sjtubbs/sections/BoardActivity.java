@@ -6,11 +6,10 @@ import com.jewelzqiu.sjtubbs.support.OnPostsGetListener;
 import com.jewelzqiu.sjtubbs.support.Post;
 import com.jewelzqiu.sjtubbs.support.PostListAdapter;
 import com.jewelzqiu.sjtubbs.support.Utils;
-import com.readystatesoftware.systembartint.SystemBarTintManager;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,7 +27,7 @@ import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 
 
-public class BoardActivity extends Activity implements OnPostsGetListener,
+public class BoardActivity extends ActionBarActivity implements OnPostsGetListener,
         AbsListView.OnScrollListener, AdapterView.OnItemClickListener {
 
     public static final String BOARD_TITLE = "board_title";
@@ -87,19 +86,19 @@ public class BoardActivity extends Activity implements OnPostsGetListener,
         mFooterView = (ProgressBar) getLayoutInflater().inflate(R.layout.progressbar_loading, null);
         mPostListView.addFooterView(mFooterView);
 
-        getActionBar().setDisplayShowHomeEnabled(true);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setTitle(intent.getStringExtra(BOARD_TITLE));
 
         boardUrl = intent.getStringExtra(BOARD_URL);
         new GetPostsTask(this).execute(boardUrl);
 
-        SystemBarTintManager tintManager = new SystemBarTintManager(this);
-        tintManager.setStatusBarTintEnabled(true);
-        tintManager.setNavigationBarTintEnabled(true);
-        tintManager.setTintColor(getResources().getColor(android.R.color.holo_blue_dark));
-        tintManager.setTintAlpha(0.69f);
+//        SystemBarTintManager tintManager = new SystemBarTintManager(this);
+//        tintManager.setStatusBarTintEnabled(true);
+//        tintManager.setNavigationBarTintEnabled(true);
+//        tintManager.setTintColor(getResources().getColor(android.R.color.holo_blue_dark));
+//        tintManager.setTintAlpha(0.69f);
     }
 
     @Override

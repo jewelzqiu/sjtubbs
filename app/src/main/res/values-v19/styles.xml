@@ -1,19 +1,19 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
-        <item name="android:actionBarStyle">@style/SJTUActionBar</item>
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:windowTranslucentNavigation">@bool/transparent_nav</item>
-    </style>
+    <!--&lt;!&ndash; Base application theme. &ndash;&gt;-->
+    <!--<style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">-->
+        <!--<item name="android:actionBarStyle">@style/SJTUActionBar</item>-->
+        <!--<item name="android:windowTranslucentStatus">true</item>-->
+        <!--<item name="android:windowTranslucentNavigation">@bool/transparent_nav</item>-->
+    <!--</style>-->
 
-    <style name="SJTUActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">#b00099cc</item>
-    </style>
+    <!--<style name="SJTUActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">-->
+        <!--<item name="android:background">#b00099cc</item>-->
+    <!--</style>-->
 
-    <style name="PicBrowserTheme" parent="android:Theme.Holo.NoActionBar.Fullscreen">
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:windowTranslucentNavigation">true</item>
-    </style>
+    <!--<style name="PicBrowserTheme" parent="android:Theme.Holo.NoActionBar.Fullscreen">-->
+        <!--<item name="android:windowTranslucentStatus">true</item>-->
+        <!--<item name="android:windowTranslucentNavigation">true</item>-->
+    <!--</style>-->
 
 </resources>
