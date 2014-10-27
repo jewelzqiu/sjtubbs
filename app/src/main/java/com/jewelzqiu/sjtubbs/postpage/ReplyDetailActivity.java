@@ -3,23 +3,20 @@ package com.jewelzqiu.sjtubbs.postpage;
 import com.jewelzqiu.sjtubbs.R;
 import com.jewelzqiu.sjtubbs.main.BBSApplication;
 import com.jewelzqiu.sjtubbs.support.Utils;
-import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -27,7 +24,7 @@ import android.widget.Toast;
 
 import java.util.HashSet;
 
-public class ReplyDetailActivity extends Activity {
+public class ReplyDetailActivity extends ActionBarActivity {
 
     public static final String REPLY_USER = "reply_user";
 
@@ -54,8 +51,8 @@ public class ReplyDetailActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_page);
 
-        getActionBar().setDisplayShowHomeEnabled(true);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mWebView = (WebView) findViewById(R.id.webview);
         mWebView.getSettings().setJavaScriptEnabled(true);
@@ -69,17 +66,17 @@ public class ReplyDetailActivity extends Activity {
 
         setTitle(getIntent().getStringExtra(REPLY_TITLE));
 
-        SystemBarTintManager tintManager = new SystemBarTintManager(this);
-        tintManager.setStatusBarTintEnabled(true);
-        tintManager.setNavigationBarTintEnabled(true);
-        tintManager.setTintColor(getResources().getColor(android.R.color.holo_blue_dark));
-        tintManager.setTintAlpha(0.69f);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            View layout = findViewById(R.id.parent_layout);
-            SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
-            layout.setPadding(0, config.getPixelInsetTop(true), 0, config.getPixelInsetBottom());
-        }
+//        SystemBarTintManager tintManager = new SystemBarTintManager(this);
+//        tintManager.setStatusBarTintEnabled(true);
+//        tintManager.setNavigationBarTintEnabled(true);
+//        tintManager.setTintColor(getResources().getColor(android.R.color.holo_blue_dark));
+//        tintManager.setTintAlpha(0.69f);
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            View layout = findViewById(R.id.parent_layout);
+//            SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
+//            layout.setPadding(0, config.getPixelInsetTop(true), 0, config.getPixelInsetBottom());
+//        }
 
         imgFormatSet.clear();
         imgFormatSet.add("jpg");

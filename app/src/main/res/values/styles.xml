@@ -1,15 +1,17 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/SJTUActionBar</item>
+        <item name="colorPrimary">@android:color/holo_blue_dark</item>
+        <item name="colorPrimaryDark">@color/blue</item>
     </style>
 
     <style name="SJTUActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
         <item name="android:background">@android:color/holo_blue_dark</item>
     </style>
 
-    <style name="PicBrowserTheme" parent="android:Theme.Holo.NoActionBar.Fullscreen">
+    <style name="PicBrowserTheme" parent="Theme.AppCompat.NoActionBar">
 
     </style>
 

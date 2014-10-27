@@ -8,13 +8,14 @@ import com.jewelzqiu.sjtubbs.support.OnSectionsGetListener;
 import com.jewelzqiu.sjtubbs.support.Section;
 import com.jewelzqiu.sjtubbs.support.Utils;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -97,7 +98,7 @@ public class SectionsFragment extends Fragment implements OnSectionsGetListener 
 //            new GetSectionsTask(this).execute();
 //        }
 
-        getActivity().getActionBar().setDisplayOptions(
+        ((ActionBarActivity) getActivity()).getSupportActionBar().setDisplayOptions(
                 ActionBar.DISPLAY_SHOW_CUSTOM |
                         ActionBar.DISPLAY_USE_LOGO |
                         ActionBar.DISPLAY_SHOW_HOME |
@@ -137,14 +138,14 @@ public class SectionsFragment extends Fragment implements OnSectionsGetListener 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().getActionBar().setCustomView(searchView);
+                ((ActionBarActivity) getActivity()).getSupportActionBar().setCustomView(searchView);
                 searchTextView.requestFocus();
                 InputMethodManager imm = (InputMethodManager) mContext
                         .getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.showSoftInput(searchTextView, InputMethodManager.SHOW_IMPLICIT);
             }
         });
-        getActivity().getActionBar().setCustomView(normalView);
+        ((ActionBarActivity) getActivity()).getSupportActionBar().setCustomView(normalView);
 
         new ReadDBTask().execute();
 
@@ -174,12 +175,12 @@ public class SectionsFragment extends Fragment implements OnSectionsGetListener 
     @Override
     public void onPause() {
         super.onPause();
-        getActivity().getActionBar().setDisplayOptions(
+        ((ActionBarActivity) getActivity()).getSupportActionBar().setDisplayOptions(
                 ActionBar.DISPLAY_USE_LOGO | ActionBar.DISPLAY_SHOW_TITLE
                         | ActionBar.DISPLAY_SHOW_HOME
                         | ActionBar.DISPLAY_HOME_AS_UP
         );
-        getActivity().getActionBar().setCustomView(normalView);
+        ((ActionBarActivity) getActivity()).getSupportActionBar().setCustomView(normalView);
     }
 
     @Override
@@ -233,7 +234,7 @@ public class SectionsFragment extends Fragment implements OnSectionsGetListener 
     }
 
     public void resetActionBar() {
-        getActivity().getActionBar().setDisplayOptions(
+        ((ActionBarActivity) getActivity()).getSupportActionBar().setDisplayOptions(
                 ActionBar.DISPLAY_USE_LOGO | ActionBar.DISPLAY_SHOW_CUSTOM
                         | ActionBar.DISPLAY_SHOW_HOME
                         | ActionBar.DISPLAY_HOME_AS_UP
@@ -242,11 +243,12 @@ public class SectionsFragment extends Fragment implements OnSectionsGetListener 
         InputMethodManager imm = (InputMethodManager) mContext
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(searchTextView.getWindowToken(), 0);
-        getActivity().getActionBar().setCustomView(normalView);
+        ((ActionBarActivity) getActivity()).getSupportActionBar().setCustomView(normalView);
     }
 
     public boolean isSearching() {
-        return getActivity().getActionBar().getCustomView() == searchView;
+        return ((ActionBarActivity) getActivity()).getSupportActionBar().getCustomView()
+                == searchView;
     }
 
     private class ReadDBTask extends AsyncTask<Void, Void, ArrayList<Section>> {

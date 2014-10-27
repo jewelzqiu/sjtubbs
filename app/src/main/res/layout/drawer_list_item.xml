@@ -4,7 +4,7 @@
     android:id="@+id/text"
     android:layout_width="match_parent"
     android:layout_height="?android:attr/listPreferredItemHeight"
-    android:textAppearance="?android:attr/textAppearanceListItem"
+    android:textAppearance="?android:attr/textAppearanceLargeInverse"
     android:gravity="center"
     android:background="@drawable/bg_drawer_item">
 

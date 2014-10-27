@@ -3,9 +3,9 @@ package com.jewelzqiu.sjtubbs.postpage;
 import com.jewelzqiu.sjtubbs.R;
 import com.koushikdutta.ion.Ion;
 
-import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 
 import uk.co.senab.photoview.PhotoView;
@@ -14,7 +14,7 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 /**
  * Created by jewelzqiu on 7/1/14.
  */
-public class SinglePicActivity extends Activity {
+public class SinglePicActivity extends ActionBarActivity {
 
     public static final String PIC_URL = "pic_url";
 

@@ -2,7 +2,6 @@ package com.jewelzqiu.sjtubbs.newpost;
 
 import com.jewelzqiu.sjtubbs.R;
 import com.jewelzqiu.sjtubbs.support.Utils;
-import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -31,6 +30,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -55,7 +55,7 @@ import java.util.ArrayList;
 /**
  * Created by jewelzqiu on 7/7/14.
  */
-public class NewPostActivity extends Activity {
+public class NewPostActivity extends ActionBarActivity {
 
     public static final String FLAG_IS_REPLY = "is_reply";
 
@@ -110,13 +110,13 @@ public class NewPostActivity extends Activity {
         boardName = intent.getStringExtra(BOARD_NAME);
         new GetPostValuesTask().execute(intent.getStringExtra(REPLY_URL));
 
-        getActionBar().setDisplayShowHomeEnabled(true);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        SystemBarTintManager tintManager = new SystemBarTintManager(this);
-        tintManager.setStatusBarTintEnabled(true);
-        tintManager.setNavigationBarTintEnabled(true);
-        tintManager.setTintColor(getResources().getColor(android.R.color.holo_blue_dark));
-        tintManager.setTintAlpha(0.69f);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        SystemBarTintManager tintManager = new SystemBarTintManager(this);
+//        tintManager.setStatusBarTintEnabled(true);
+//        tintManager.setNavigationBarTintEnabled(true);
+//        tintManager.setTintColor(getResources().getColor(android.R.color.holo_blue_dark));
+//        tintManager.setTintAlpha(0.69f);
     }
 
     @Override

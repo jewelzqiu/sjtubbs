@@ -4,16 +4,15 @@ import com.etsy.android.grid.StaggeredGridView;
 import com.jewelzqiu.sjtubbs.R;
 import com.jewelzqiu.sjtubbs.main.BBSApplication;
 import com.jewelzqiu.sjtubbs.support.Utils;
-import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
@@ -27,7 +26,7 @@ import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 
-public class UploadedPicsActivity extends Activity implements AbsListView.OnScrollListener,
+public class UploadedPicsActivity extends ActionBarActivity implements AbsListView.OnScrollListener,
         AdapterView.OnItemClickListener {
 
     public static final String UPLOADED_URL = "uploaded_url";
@@ -72,8 +71,8 @@ public class UploadedPicsActivity extends Activity implements AbsListView.OnScro
         mGridView.setOnScrollListener(this);
         mGridView.setOnItemClickListener(this);
 
-        getActionBar().setDisplayShowHomeEnabled(true);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mUploadedUrl = getIntent().getStringExtra(UPLOADED_URL);
         setTitle(getString(R.string.action_uploaded) + ": " + getIntent()
@@ -84,11 +83,11 @@ public class UploadedPicsActivity extends Activity implements AbsListView.OnScro
 
         new GetUploadedPicsTask(true).execute(mUploadedUrl);
 
-        SystemBarTintManager tintManager = new SystemBarTintManager(this);
-        tintManager.setStatusBarTintEnabled(true);
-        tintManager.setNavigationBarTintEnabled(true);
-        tintManager.setTintColor(getResources().getColor(android.R.color.holo_blue_dark));
-        tintManager.setTintAlpha(0.69f);
+//        SystemBarTintManager tintManager = new SystemBarTintManager(this);
+//        tintManager.setStatusBarTintEnabled(true);
+//        tintManager.setNavigationBarTintEnabled(true);
+//        tintManager.setTintColor(getResources().getColor(android.R.color.holo_blue_dark));
+//        tintManager.setTintAlpha(0.69f);
     }
 
 //    @Override

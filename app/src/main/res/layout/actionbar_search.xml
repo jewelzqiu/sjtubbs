@@ -21,7 +21,7 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:padding="2dp"
-        android:src="@android:drawable/ic_menu_close_clear_cancel"
+        android:src="@drawable/ic_clear_white"
         android:background="@null"
         android:contentDescription="@string/clear"/>
 
