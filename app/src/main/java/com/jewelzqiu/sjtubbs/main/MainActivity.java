@@ -169,6 +169,11 @@ public class MainActivity extends ActionBarActivity
             mSectionsFragment.resetActionBar();
             return;
         }
+        if (mFragment != mTopTenFragment) {
+            mFragment = mTopTenFragment;
+            getFragmentManager().beginTransaction().replace(R.id.container, mFragment).commit();
+            return;
+        }
         super.onBackPressed();
     }
 }

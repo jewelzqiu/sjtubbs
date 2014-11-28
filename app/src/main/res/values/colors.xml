@@ -5,5 +5,7 @@
     <color name="male">#33a0a0</color>
     <color name="female">#d000d0</color>
     <color name="indigo">#3f51b5</color>
-    <color name="blue">#5677fc</color>
+    <color name="blue">#2196F3</color>
+    <color name="darker_blue">#1E88E5</color>
+    <color name="accent">#90CAF9</color>
 </resources>
