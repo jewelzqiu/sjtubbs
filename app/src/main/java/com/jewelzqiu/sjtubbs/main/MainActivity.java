@@ -170,8 +170,7 @@ public class MainActivity extends ActionBarActivity
             return;
         }
         if (mFragment != mTopTenFragment) {
-            mFragment = mTopTenFragment;
-            getFragmentManager().beginTransaction().replace(R.id.container, mFragment).commit();
+            mNavigationDrawerFragment.selectItem(0);
             return;
         }
         super.onBackPressed();
