@@ -14,8 +14,6 @@
         android:singleLine="true"
         android:ellipsize="marquee"
         android:textSize="24sp"
-        android:textColor="@color/sjtublue">
-
-    </TextView>
+        android:textColor="@color/sjtublue" />
 
 </android.support.v7.widget.CardView>
