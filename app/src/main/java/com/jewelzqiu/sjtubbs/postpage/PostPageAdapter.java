@@ -134,7 +134,7 @@ public class PostPageAdapter extends BaseAdapter {
         @Override
         public Drawable getDrawable(String source) {
             final UrlDrawable urlDrawable = new UrlDrawable();
-            Future<Bitmap> bitmapFuture = Ion.with(mContext, source).asBitmap();
+            Future<Bitmap> bitmapFuture = Ion.with(mContext).load(source).asBitmap();
             bitmapFuture.then(new FutureCallback<Bitmap>() {
                 @Override
                 public void onCompleted(Exception e, Bitmap bitmap) {
