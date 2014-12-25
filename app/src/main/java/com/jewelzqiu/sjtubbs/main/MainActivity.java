@@ -104,15 +104,14 @@ public class MainActivity extends ActionBarActivity
         setTitle(mTitle);
         if (mFragment != null) {
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction
-                    .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+            transaction.setCustomAnimations(R.animator.fragment_slide_left_enter,
+                    R.animator.fragment_slide_left_exit);
             transaction.replace(R.id.container, mFragment).commit();
         }
     }
 
     public void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);
         if (mFragment == mSectionsFragment) {
