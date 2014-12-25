@@ -5,6 +5,7 @@
         <item name="android:actionBarStyle">@style/SJTUActionBar</item>
         <item name="colorPrimary">@color/blue</item>
         <item name="colorPrimaryDark">@color/darker_blue</item>
+        <item name="android:navigationBarColor">@color/blue</item>
         <item name="android:colorAccent">@color/accent</item>
     </style>
 

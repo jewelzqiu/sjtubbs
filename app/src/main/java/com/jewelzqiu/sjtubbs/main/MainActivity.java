@@ -8,7 +8,7 @@ import com.jewelzqiu.sjtubbs.support.MyExceptionHandler;
 import com.jewelzqiu.sjtubbs.topten.TopTenFragment;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -74,7 +74,6 @@ public class MainActivity extends ActionBarActivity
     public void onNavigationDrawerItemSelected(int position) {
         mCurrentItem = position;
         // update the main content by replacing fragments
-        FragmentManager fragmentManager = getFragmentManager();
         switch (position) {
             case 0:
                 if (mTopTenFragment == null) {
@@ -104,7 +103,10 @@ public class MainActivity extends ActionBarActivity
         mTitle = drawerListTitles[position];
         setTitle(mTitle);
         if (mFragment != null) {
-            fragmentManager.beginTransaction().replace(R.id.container, mFragment).commit();
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction
+                    .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+            transaction.replace(R.id.container, mFragment).commit();
         }
     }
 
@@ -171,6 +173,7 @@ public class MainActivity extends ActionBarActivity
         }
         if (mFragment != mTopTenFragment) {
             mNavigationDrawerFragment.selectItem(0);
+            invalidateOptionsMenu();
             return;
         }
         super.onBackPressed();
