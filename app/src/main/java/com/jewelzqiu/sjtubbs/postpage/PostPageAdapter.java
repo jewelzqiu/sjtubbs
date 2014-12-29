@@ -2,7 +2,6 @@ package com.jewelzqiu.sjtubbs.postpage;
 
 import com.jewelzqiu.sjtubbs.R;
 import com.jewelzqiu.sjtubbs.main.BBSApplication;
-import com.jewelzqiu.sjtubbs.newpost.NewPostActivity;
 import com.jewelzqiu.sjtubbs.support.Reply;
 import com.jewelzqiu.sjtubbs.support.UrlDrawable;
 import com.jewelzqiu.sjtubbs.support.Utils;
@@ -101,11 +100,18 @@ public class PostPageAdapter extends BaseAdapter {
             Utils.login(context, null);
             return;
         }
-        Intent intent = new Intent(context, NewPostActivity.class);
-        intent.putExtra(NewPostActivity.FLAG_IS_REPLY, true);
-        intent.putExtra(NewPostActivity.REPLY_URL, url);
-        intent.putExtra(NewPostActivity.REPLY_TO, mReplyList.get(position).userId);
-        intent.putExtra(NewPostActivity.BOARD_NAME, boardName);
+//        Intent intent = new Intent(context, NewPostActivity.class);
+//        intent.putExtra(NewPostActivity.FLAG_IS_REPLY, true);
+//        intent.putExtra(NewPostActivity.REPLY_URL, url);
+//        intent.putExtra(NewPostActivity.REPLY_TO, mReplyList.get(position).userId);
+//        intent.putExtra(NewPostActivity.BOARD_NAME, boardName);
+
+        Intent intent = new Intent(context, ReplyDetailActivity.class);
+        intent.putExtra(ReplyDetailActivity.REPLY_USER, mReplyList.get(position).userId);
+        intent.putExtra(ReplyDetailActivity.REPLY_URL, mReplyList.get(position).url);
+        intent.putExtra(ReplyDetailActivity.REPLY_CONTENT, mReplyList.get(position).content);
+        intent.putExtra(ReplyDetailActivity.REPLY_TITLE, mReplyList.get(position).title);
+        intent.putExtra(ReplyDetailActivity.REPLY_BOARD, boardName);
         mContext.startActivity(intent);
     }
 

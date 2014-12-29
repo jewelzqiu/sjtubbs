@@ -2,6 +2,7 @@ package com.jewelzqiu.sjtubbs.postpage;
 
 import com.jewelzqiu.sjtubbs.R;
 import com.jewelzqiu.sjtubbs.main.BBSApplication;
+import com.jewelzqiu.sjtubbs.newpost.NewPostActivity;
 import com.jewelzqiu.sjtubbs.support.Utils;
 
 import org.jsoup.Jsoup;
@@ -30,9 +31,13 @@ public class ReplyDetailActivity extends ActionBarActivity {
 
     public static final String REPLY_TIME = "reply_time";
 
-    public static final String REPLY_CONTENT = "reply_url";
+    public static final String REPLY_CONTENT = "reply_content";
 
     public static final String REPLY_TITLE = "reply_title";
+
+    public static final String REPLY_BOARD = "reply_board";
+
+    public static final String REPLY_URL = "reply_url";
 
     private static final String IMG_AUTO_ZOOM = "javascript:"
             + "var elements = document.getElementsByTag('img').onload = "
@@ -45,6 +50,8 @@ public class ReplyDetailActivity extends ActionBarActivity {
     private WebView mWebView;
 
     private HashSet<String> imgFormatSet = new HashSet<String>();
+
+    private String mUrl, mReplyTo, mBoardName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,30 +91,43 @@ public class ReplyDetailActivity extends ActionBarActivity {
         imgFormatSet.add("gif");
         imgFormatSet.add("png");
         imgFormatSet.add("bmp");
+
+        mUrl = getIntent().getStringExtra(REPLY_URL);
+        mReplyTo = getIntent().getStringExtra(REPLY_USER);
+        mBoardName = getIntent().getStringExtra(REPLY_BOARD);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (BBSApplication.imgUrlMap.isEmpty()) {
-            return true;
+            getMenuInflater().inflate(R.menu.reply_detail_no_pic, menu);
+        } else {
+            getMenuInflater().inflate(R.menu.reply_detail, menu);
         }
-        getMenuInflater().inflate(R.menu.post_page, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            finish();
-            return true;
-        } else if (id == R.id.action_pic) {
-            if (BBSApplication.imgUrlMap.isEmpty()) {
-                Toast.makeText(this, "此贴没有图片！", Toast.LENGTH_SHORT).show();
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
                 return true;
-            }
-            startActivity(new Intent(this, PicViewPagerActivity.class));
-            return true;
+            case R.id.action_pic:
+                if (BBSApplication.imgUrlMap.isEmpty()) {
+                    Toast.makeText(this, "此贴没有图片！", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+                startActivity(new Intent(this, PicViewPagerActivity.class));
+                return true;
+            case R.id.action_reply:
+                Intent intent = new Intent(ReplyDetailActivity.this, NewPostActivity.class);
+                intent.putExtra(NewPostActivity.FLAG_IS_REPLY, true);
+                intent.putExtra(NewPostActivity.REPLY_URL, mUrl);
+                intent.putExtra(NewPostActivity.REPLY_TO, mReplyTo);
+                intent.putExtra(NewPostActivity.BOARD_NAME, mBoardName);
+                startActivity(intent);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -123,14 +143,13 @@ public class ReplyDetailActivity extends ActionBarActivity {
 
     private class MyWebViewClient extends WebViewClient {
 
-        @Override
-        public void onPageFinished(WebView view, String url) {
-            view.loadUrl(IMG_AUTO_ZOOM);
-        }
+//        @Override
+//        public void onPageFinished(WebView view, String url) {
+//            view.loadUrl(IMG_AUTO_ZOOM);
+//        }
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            System.out.println("clicked url: " + url);
             if (BBSApplication.imgUrlMap.containsKey(url)) {
                 Intent intent = new Intent(ReplyDetailActivity.this,
                         PicViewPagerActivity.class);
@@ -143,6 +162,7 @@ public class ReplyDetailActivity extends ActionBarActivity {
                 intent.putExtra(SinglePicActivity.PIC_URL, url);
                 startActivity(intent);
             } else {
+                // TODO parse post data
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(Uri.parse(url));
                 startActivity(intent);
@@ -169,17 +189,9 @@ public class ReplyDetailActivity extends ActionBarActivity {
             boolean success = true;
 
             Document doc = Jsoup.parse(html);
-
-            Elements links = doc.select("a");
-            for (Element link : links) {
-                String url = link.attr("href");
-                if (url.startsWith("/")) {
-                    link.attr("href", Utils.BBS_BASE_URL + url);
-                }
-            }
-
             Elements imgs = doc.select("img");
             for (Element img : imgs) {
+                img.attr("style", "max-width:100%; height:auto");
                 img.wrap("<a href='" + img.attr("src") + "'></a>");
                 int pos = BBSApplication.imgUrlMap.size();
                 String url = img.attr("src");
@@ -194,7 +206,8 @@ public class ReplyDetailActivity extends ActionBarActivity {
         @Override
         protected void onPostExecute(Boolean success) {
             if (success) {
-                mWebView.loadDataWithBaseURL(null, content, "text/html", "UTF-8", null);
+                mWebView.loadDataWithBaseURL(Utils.BBS_BASE_URL, content, "text/html", "UTF-8",
+                        null);
             } else {
                 mWebView.loadUrl(null);
             }
