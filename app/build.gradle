@@ -1,13 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion "21.0.2"
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
+    useLibrary  'org.apache.http.legacy'
 
     defaultConfig {
         applicationId "com.jewelzqiu.sjtubbs"
         minSdkVersion 14
-        targetSdkVersion 21
+        targetSdkVersion 23
         versionCode 21
         versionName "0.5.3"
     }
@@ -38,7 +39,7 @@ dependencies {
     compile 'org.jsoup:jsoup:1.7.3'
     compile 'com.github.chrisbanes.actionbarpulltorefresh:library:+'
     compile 'com.github.chrisbanes.photoview:library:1.2.3'
-    compile 'com.koushikdutta.ion:ion:2.0.1'
+    compile 'com.koushikdutta.ion:ion:+'
     compile 'com.etsy.android.grid:library:1.0.5'
 //    compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
     compile 'org.apache.httpcomponents:httpcore:4.3'
